@@ -1,0 +1,8 @@
+object dmMain: TdmMain
+  OldCreateOrder = False
+  Height = 168
+  HorizontalOffset = 345
+  VerticalOffset = 202
+  Width = 242
+  PPI = 96
+end

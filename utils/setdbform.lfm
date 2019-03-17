@@ -1,0 +1,9 @@
+object frmSetDB: TfrmSetDB
+  Left = 360
+  Height = 240
+  Top = 200
+  Width = 320
+  BorderStyle = bsDialog
+  Caption = 'Database Properties'
+  LCLVersion = '1.8.2.0'
+end
