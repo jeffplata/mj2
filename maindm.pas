@@ -5,7 +5,9 @@ unit mainDM;
 interface
 
 uses
-  Classes, SysUtils, FileUtil;
+  Classes, SysUtils, FileUtil
+  , AppUserU
+  ;
 
 type
 
@@ -13,9 +15,12 @@ type
 
   TdmMain = class(TDataModule)
   private
-
+    function GetCurrentUser: TAppUser;
+    procedure SetCurrentUser(AValue: TAppUser);
   public
-    function SetDatabase(const hostname, dbname, username, pwd: string): boolean;
+    property CurrentUser: TAppUser read GetCurrentUser write SetCurrentUser;
+    function OpenDatabase: Boolean;
+    function Login: Boolean;
   end;
 
 var
@@ -23,17 +28,37 @@ var
 
 implementation
 
-uses gConnectionu, SetDB;
+uses gConnectionu
+  ;
 
 {$R *.lfm}
 
 { TdmMain }
 
-function TdmMain.SetDatabase: boolean;
+function TdmMain.GetCurrentUser: TAppUser;
 begin
-  gConnection.OpenDatabase;
+  if CurrentUser = nil then
+    CurrentUser := AppUser;
+  Result := CurrentUser;
+end;
+
+procedure TdmMain.SetCurrentUser(AValue: TAppUser);
+begin
+  if AValue <> CurrentUser then
+    CurrentUser := AValue;
+end;
+
+function TdmMain.OpenDatabase: Boolean;
+begin
+  Result :=  gConnection.OpenDatabase;
   //('localhost','c:\projects\mj2\data\database.fdb','sysdba','masterkey')
-  result := setdb.SetDatabase(hostname, dbname, username, pwd);
+end;
+
+function TdmMain.Login: Boolean;
+begin
+  Result := False;
+  if not AppUser.Loggedin then
+    //show login form
 end;
 
 end.

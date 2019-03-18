@@ -5,17 +5,20 @@ unit MainForm;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  ActnList;
 
 type
 
   { TfrmMain }
 
   TfrmMain = class(TForm)
+    actManageUser: TAction;
+    ActionList1: TActionList;
     Button1: TButton;
-    Button2: TButton;
     Label1: TLabel;
     Memo1: TMemo;
+    procedure actManageUserExecute(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
@@ -30,7 +33,7 @@ var
 implementation
 
 uses mainDM
-, CryptU
+//, CryptU
   ;
 
 {$R *.lfm}
@@ -39,27 +42,26 @@ uses mainDM
 
 procedure TfrmMain.Button1Click(Sender: TObject);
 begin
-  if dmMain.SetDatabase
+
+end;
+
+procedure TfrmMain.actManageUserExecute(Sender: TObject);
+begin
+  ShowMessage('manage users');
+end;
+
+procedure TfrmMain.FormCreate(Sender: TObject);
+begin
+  if dmMain.OpenDatabase
   then
     label1.Caption := 'connected'
   else begin
     label1.caption := 'not connected';
-    //ShowMessage( gConnection.ErrorMessage );
   end;
-end;
 
-procedure TfrmMain.FormCreate(Sender: TObject);
-var
-  e,d : string;
-begin
-  e := CryptU.Encrypt('sysdba');
-  d := CryptU.Decrypt(e);
-  memo1.lines.add(e);
-  memo1.lines.add(d);
-  e := CryptU.Encrypt('masterkey');
-  d := CryptU.Decrypt(e);
-  memo1.lines.add(e);
-  memo1.lines.add(d);
+  //dmMain.Login;
+
+  memo1.lines.add(GetAppConfigDir(true))
 end;
 
 end.

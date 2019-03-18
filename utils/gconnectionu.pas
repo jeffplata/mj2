@@ -14,10 +14,12 @@ type
   TgConnection = class(TIBConnection)
   private
     FErrorMessage: string;
+    procedure ReadValues;
+    procedure SaveValues;
   public
     property ErrorMessage: string read FErrorMessage write FErrorMessage;
     function OpenDatabase: Boolean;
-    procedure ReadValues;
+    function I_OpenDB: Boolean;
   end;
 
 var
@@ -27,14 +29,14 @@ implementation
 
 uses IniFiles
   , CryptU
+  , SetDBForm
   ;
 
 { TgConnection }
 
-function TgConnection.OpenDatabase: Boolean;
+function TgConnection.I_OpenDB: Boolean;
 begin
   Result := False;
-  gConnection.ReadValues;
   try
     try
       gConnection.open;
@@ -45,6 +47,18 @@ begin
     end;
   finally
   end;
+end;
+
+function TgConnection.OpenDatabase: Boolean;
+begin
+  Result := False;
+  gConnection.ReadValues;
+
+  Result := gConnection.I_OpenDB;
+  if not Result then
+    Result := TfrmSetDB.Execute;
+
+  if Result then gConnection.SaveValues;
 end;
 
 procedure TgConnection.ReadValues;
@@ -65,16 +79,27 @@ begin
     try
       HostName := ini.ReadString('database','hostname','');
       DatabaseName := ini.ReadString('database','databasename','');
-      //UserName:= ini.ReadString('database','username','');
-      //Password:= ini.ReadString('database','password','');
     finally
       ini.free;
     end;
   end;
-  if (HostName = '') or (DatabaseName = '') then
-    //read from user;
   UserName:= edbusr;
   Password:= edbpwd;
+end;
+
+procedure TgConnection.SaveValues;
+var
+  fn : string;
+  ini : TIniFile;
+begin
+  fn := GetAppConfigFile(true);
+  ini := TIniFile.Create(fn);
+  try
+    ini.WriteString('database','hostname',gConnection.HostName);
+    ini.WriteString('database','databasename',gConnection.DatabaseName);
+  finally
+    ini.free;
+  end;
 end;
 
 initialization

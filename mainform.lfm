@@ -17,19 +17,11 @@ object frmMain: TfrmMain
     OnClick = Button1Click
     TabOrder = 0
   end
-  object Button2: TButton
-    Left = 48
-    Height = 25
-    Top = 56
-    Width = 75
-    Caption = 'Disconnect'
-    TabOrder = 1
-  end
   object Label1: TLabel
     Left = 144
-    Height = 13
+    Height = 15
     Top = 24
-    Width = 31
+    Width = 34
     Caption = 'Label1'
     ParentColor = False
   end
@@ -38,6 +30,14 @@ object frmMain: TfrmMain
     Height = 91
     Top = 103
     Width = 251
-    TabOrder = 2
+    TabOrder = 1
+  end
+  object ActionList1: TActionList
+    left = 238
+    top = 11
+    object actManageUser: TAction
+      Caption = 'Manage Users'
+      OnExecute = actManageUserExecute
+    end
   end
 end

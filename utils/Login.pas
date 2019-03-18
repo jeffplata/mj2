@@ -1,4 +1,4 @@
-unit SetDBForm;
+unit Login;
 
 {$mode objfpc}{$H+}
 
@@ -10,20 +10,17 @@ uses
 
 type
 
-  { TfrmSetDB }
+  { TfrmLogin }
 
-  TfrmSetDB = class(TForm)
-    actBrowse: TAction;
+  TfrmLogin = class(TForm)
     actOk: TAction;
     ActionList1: TActionList;
-    btnBrowse: TButton;
     btnOk: TButton;
     btnCancel: TButton;
-    edtHost: TEdit;
-    edtDatabase: TEdit;
+    edtUserName: TEdit;
+    edtPassword: TEdit;
     Label1: TLabel;
     Label2: TLabel;
-    procedure actBrowseExecute(Sender: TObject);
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure actOkExecute(Sender: TObject);
   private
@@ -38,18 +35,18 @@ uses gConnectionu;
 
 {$R *.lfm}
 
-{ TfrmSetDB }
+{ TfrmLogin }
 
 
-procedure TfrmSetDB.actOkExecute(Sender: TObject);
+procedure TfrmLogin.actOkExecute(Sender: TObject);
 var
   goodConnect: boolean;
   oldHost, oldDB: string;
 begin
   oldHost:= gConnection.HostName;
   oldDB:= gConnection.DatabaseName;
-  gConnection.HostName:= edtHost.Text;
-  gConnection.DatabaseName:= edtDatabase.Text;
+  gConnection.HostName:= edtUserName.Text;
+  gConnection.DatabaseName:= edtPassword.Text;
 
   Screen.Cursor:= crHourGlass;
   try
@@ -67,34 +64,22 @@ begin
   end;
 end;
 
-
-procedure TfrmSetDB.ActionList1Update(AAction: TBasicAction;
+procedure TfrmLogin.ActionList1Update(AAction: TBasicAction;
   var Handled: Boolean);
 begin
-  actOk.Enabled:= (edtHost.Text <> '') and (edtDatabase.Text <> '');
-end;
-
-procedure TfrmSetDB.actBrowseExecute(Sender: TObject);
-var
-  dlgOpenFile: TOpenDialog;
-begin
-  dlgOpenFile := TOpenDialog.Create(self);
-  dlgOpenFile.Filter:= 'Databases|*.fdb|All files|*.*;';
-  if dlgOpenFile.Execute then
-    edtDatabase.Text:= dlgOpenFile.FileName;
-  dlgOpenFile.Free;
+  actOk.Enabled:= (edtUserName.Text <> '') and (edtPassword.Text <> '');
 end;
 
 
-class function TfrmSetDB.Execute: Boolean;
+class function TfrmLogin.Execute: Boolean;
 var
-  frm: TfrmSetDB;
+  frm: TfrmLogin;
 begin
   Result := False;
-  frm := TfrmSetDB.Create(nil);
+  frm := TfrmLogin.Create(nil);
   try
     if frm.ShowModal = mrOk then
-      Result := gConnection.Connected;
+      //Result := gConnection.Connected;
   finally
     frm.Free;
   end;
