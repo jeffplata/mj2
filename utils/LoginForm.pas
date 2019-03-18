@@ -1,4 +1,4 @@
-unit Login;
+unit LoginForm;
 
 {$mode objfpc}{$H+}
 
@@ -40,8 +40,7 @@ uses gConnectionu;
 
 procedure TfrmLogin.actOkExecute(Sender: TObject);
 var
-  goodConnect: boolean;
-  oldHost, oldDB: string;
+
 begin
   oldHost:= gConnection.HostName;
   oldDB:= gConnection.DatabaseName;
@@ -78,7 +77,8 @@ begin
   Result := False;
   frm := TfrmLogin.Create(nil);
   try
-    if frm.ShowModal = mrOk then
+    frm.ShowModal;
+    //if frm.ShowModal = mrOk then
       //Result := gConnection.Connected;
   finally
     frm.Free;

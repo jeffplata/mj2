@@ -15,8 +15,8 @@ type
   TfrmMain = class(TForm)
     actManageUser: TAction;
     ActionList1: TActionList;
-    Button1: TButton;
     Label1: TLabel;
+    Label2: TLabel;
     Memo1: TMemo;
     procedure actManageUserExecute(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -59,7 +59,12 @@ begin
     label1.caption := 'not connected';
   end;
 
-  //dmMain.Login;
+  dmMain.Login;
+
+  if dmMain.CurrentUser.Loggedin then
+    label2.Caption:= 'Logged in'
+  else
+    label2.caption := 'Not logged in';
 
   memo1.lines.add(GetAppConfigDir(true))
 end;

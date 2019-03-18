@@ -20,6 +20,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+    function LoginByForm: Boolean;
   published
     property UserName: string read FUserName write FUserName;
     property Roles: TStrings read FRoles write FRoles;
@@ -31,6 +32,8 @@ type
     AppUser: TAppUser;
 
 implementation
+
+uses LoginForm;
 
 
 { TAppUser }
@@ -46,6 +49,12 @@ destructor TAppUser.Destroy;
 begin
   FRoles.Free;
   inherited Destroy;
+end;
+
+function TAppUser.LoginByForm: Boolean;
+begin
+  Result := TfrmLogin.Execute;
+  FLoggedin:= Result;
 end;
 
 initialization

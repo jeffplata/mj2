@@ -15,10 +15,10 @@ type
 
   TdmMain = class(TDataModule)
   private
+    FCurrentUser: TAppUser;
     function GetCurrentUser: TAppUser;
-    procedure SetCurrentUser(AValue: TAppUser);
   public
-    property CurrentUser: TAppUser read GetCurrentUser write SetCurrentUser;
+    property CurrentUser: TAppUser read GetCurrentUser write FCurrentUser;
     function OpenDatabase: Boolean;
     function Login: Boolean;
   end;
@@ -37,15 +37,9 @@ uses gConnectionu
 
 function TdmMain.GetCurrentUser: TAppUser;
 begin
-  if CurrentUser = nil then
-    CurrentUser := AppUser;
-  Result := CurrentUser;
-end;
-
-procedure TdmMain.SetCurrentUser(AValue: TAppUser);
-begin
-  if AValue <> CurrentUser then
-    CurrentUser := AValue;
+  if FCurrentUser = nil then
+    FCurrentUser := AppUser;
+  Result := FCurrentUser;
 end;
 
 function TdmMain.OpenDatabase: Boolean;
@@ -58,7 +52,7 @@ function TdmMain.Login: Boolean;
 begin
   Result := False;
   if not AppUser.Loggedin then
-    //show login form
+    Result := AppUser.LoginByForm;
 end;
 
 end.
