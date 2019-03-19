@@ -24,8 +24,8 @@ type
     Label1: TLabel;
     Label2: TLabel;
     procedure actBrowseExecute(Sender: TObject);
-    procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure actOkExecute(Sender: TObject);
+    procedure actOkUpdate(Sender: TObject);
   private
 
   public
@@ -67,9 +67,7 @@ begin
   end;
 end;
 
-
-procedure TfrmSetDB.ActionList1Update(AAction: TBasicAction;
-  var Handled: Boolean);
+procedure TfrmSetDB.actOkUpdate(Sender: TObject);
 begin
   actOk.Enabled:= (edtHost.Text <> '') and (edtDatabase.Text <> '');
 end;

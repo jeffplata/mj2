@@ -21,8 +21,8 @@ type
     edtPassword: TEdit;
     Label1: TLabel;
     Label2: TLabel;
-    procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure actOkExecute(Sender: TObject);
+    procedure actOkUpdate(Sender: TObject);
   private
 
   public
@@ -31,7 +31,7 @@ type
 
 implementation
 
-uses gConnectionu;
+uses gConnectionu, AppUserU;
 
 {$R *.lfm}
 
@@ -40,35 +40,25 @@ uses gConnectionu;
 
 procedure TfrmLogin.actOkExecute(Sender: TObject);
 var
-
+  goodLogin : Boolean;
 begin
-  oldHost:= gConnection.HostName;
-  oldDB:= gConnection.DatabaseName;
-  gConnection.HostName:= edtUserName.Text;
-  gConnection.DatabaseName:= edtPassword.Text;
-
   Screen.Cursor:= crHourGlass;
   try
-    goodConnect:= gConnection.I_OpenDB;
+    goodLogin:= AppUser.Login(edtUserName.Text, edtPassword.Text)
   finally
     Screen.Cursor:= crDefault;
   end;
 
-  if goodConnect then
+  if goodLogin then
     ModalResult:= mrOk
-  else begin
-    MessageDlg('Connection Error','Failed to connect to database.',mtInformation,[mbOk],0);
-    gConnection.HostName:= oldHost;
-    gConnection.DatabaseName:= oldDB;
-  end;
+  else
+    MessageDlg('Login failed','Username/password is incorrect.',mtInformation,[mbOk],0);
 end;
 
-procedure TfrmLogin.ActionList1Update(AAction: TBasicAction;
-  var Handled: Boolean);
+procedure TfrmLogin.actOkUpdate(Sender: TObject);
 begin
-  actOk.Enabled:= (edtUserName.Text <> '') and (edtPassword.Text <> '');
+  actOk.Enabled:= (edtUserName.Text <> '') and (edtPassword.Text <>'');
 end;
-
 
 class function TfrmLogin.Execute: Boolean;
 var
@@ -77,9 +67,8 @@ begin
   Result := False;
   frm := TfrmLogin.Create(nil);
   try
-    frm.ShowModal;
-    //if frm.ShowModal = mrOk then
-      //Result := gConnection.Connected;
+    if frm.ShowModal = mrOk then
+      Result := AppUser.Loggedin;
   finally
     frm.Free;
   end;

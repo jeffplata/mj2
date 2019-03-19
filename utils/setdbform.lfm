@@ -87,6 +87,7 @@ object frmSetDB: TfrmSetDB
     object actOk: TAction
       Caption = 'Ok'
       OnExecute = actOkExecute
+      OnUpdate = actOkUpdate
     end
     object actBrowse: TAction
       Caption = 'Browse...'
