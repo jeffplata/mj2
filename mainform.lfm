@@ -41,9 +41,6 @@ object frmMain: TfrmMain
     top = 24
     object MenuItem2: TMenuItem
       Caption = '&File'
-      object MenuItem4: TMenuItem
-        Action = actLogin
-      end
       object MenuItem5: TMenuItem
         Action = actLogout
       end

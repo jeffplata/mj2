@@ -23,7 +23,6 @@ type
     MenuItem11: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
     StatusBar1: TStatusBar;
@@ -69,6 +68,7 @@ begin
   //logout
   dmMain.Logout;
   dmMain.Login;
+  if not dmMain.Loggedin then actExit.Execute;
 end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);

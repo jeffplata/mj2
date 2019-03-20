@@ -7,7 +7,8 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, MainForm, SetDBForm, mainDM, UserManagerForm;
+  Forms, MainForm, SetDBForm, mainDM, fortes324forlaz, lazcontrols,
+  UserManagerForm, _TemplateForm;
 
 {$R *.res}
 
@@ -16,9 +17,9 @@ begin
   RequireDerivedFormResource:=True;
   Application.Initialize;
   Application.CreateForm(TdmMain, dmMain);
+  Application.CreateForm(TfrmMain, frmMain);
   if dmMain.Loggedin then
   begin
-    Application.CreateForm(TfrmMain, frmMain);
     Application.Run;
   end;
 end.

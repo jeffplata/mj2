@@ -1,17 +1,19 @@
 object frmUserManager: TfrmUserManager
-  Left = 384
-  Height = 220
-  Top = 237
-  Width = 451
+  Left = 311
+  Height = 286
+  Top = 265
+  Width = 455
+  BorderIcons = [biSystemMenu]
   Caption = 'User Manager'
-  ClientHeight = 220
-  ClientWidth = 451
+  ClientHeight = 286
+  ClientWidth = 455
+  Position = poMainFormCenter
   LCLVersion = '1.8.2.0'
   object ToolBar1: TToolBar
     Left = 0
     Height = 26
     Top = 0
-    Width = 451
+    Width = 455
     Caption = 'ToolBar1'
     ShowCaptions = True
     TabOrder = 0
@@ -19,29 +21,106 @@ object frmUserManager: TfrmUserManager
       Left = 1
       Top = 2
       Caption = 'Users'
+      Down = True
       Grouped = True
       Style = tbsCheck
     end
     object ToolButton2: TToolButton
-      Left = 37
+      Left = 36
       Top = 2
       Caption = 'Roles'
       Grouped = True
       Style = tbsCheck
     end
     object ToolButton3: TToolButton
-      Left = 73
+      Left = 70
       Top = 2
       Caption = 'Tasks'
       Grouped = True
       Style = tbsCheck
     end
     object ToolButton4: TToolButton
-      Left = 110
+      Left = 105
       Height = 22
       Top = 2
       Caption = 'ToolButton4'
       Style = tbsSeparator
+    end
+  end
+  object Panel2: TPanel
+    Left = 8
+    Height = 38
+    Top = 248
+    Width = 439
+    Align = alBottom
+    BorderSpacing.Left = 8
+    BorderSpacing.Right = 8
+    BevelOuter = bvNone
+    ClientHeight = 38
+    ClientWidth = 439
+    TabOrder = 1
+    object Bevel2: TBevel
+      Left = 0
+      Height = 50
+      Top = 0
+      Width = 439
+      Align = alTop
+      Shape = bsTopLine
+    end
+    object Button4: TButton
+      Left = 364
+      Height = 25
+      Top = 8
+      Width = 75
+      Anchors = [akTop, akRight]
+      Caption = 'Close'
+      OnClick = Button4Click
+      TabOrder = 0
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 222
+    Top = 26
+    Width = 281
+    Align = alClient
+    BevelOuter = bvNone
+    Caption = 'Panel1'
+    ClientHeight = 222
+    ClientWidth = 281
+    TabOrder = 2
+    object ListView1: TListView
+      Left = 0
+      Height = 198
+      Top = 24
+      Width = 281
+      Align = alBottom
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      Columns = <>
+      TabOrder = 0
+    end
+  end
+  object Panel3: TPanel
+    Left = 285
+    Height = 222
+    Top = 26
+    Width = 170
+    Align = alRight
+    BorderSpacing.Left = 4
+    BevelOuter = bvNone
+    Caption = 'Panel3'
+    ClientHeight = 222
+    ClientWidth = 170
+    TabOrder = 3
+    object ListView2: TListView
+      Left = 0
+      Height = 198
+      Top = 24
+      Width = 170
+      Align = alBottom
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      Columns = <>
+      TabOrder = 0
     end
   end
 end
