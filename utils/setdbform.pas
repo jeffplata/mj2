@@ -90,6 +90,7 @@ var
 begin
   Result := False;
   frm := TfrmSetDB.Create(nil);
+  frm.caption := Application.title +' '+ frm.caption;
   try
     if frm.ShowModal = mrOk then
       Result := gConnection.Connected;

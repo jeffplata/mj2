@@ -17,6 +17,7 @@ type
     ActionList1: TActionList;
     btnOk: TButton;
     btnCancel: TButton;
+    CheckBox1: TCheckBox;
     edtUserName: TEdit;
     edtPassword: TEdit;
     Label1: TLabel;
@@ -44,7 +45,7 @@ var
 begin
   Screen.Cursor:= crHourGlass;
   try
-    goodLogin:= AppUser.Login(edtUserName.Text, edtPassword.Text)
+    goodLogin:= AppUser.I_Login(edtUserName.Text, edtPassword.Text, CheckBox1.Checked)
   finally
     Screen.Cursor:= crDefault;
   end;
@@ -66,6 +67,7 @@ var
 begin
   Result := False;
   frm := TfrmLogin.Create(nil);
+  frm.Caption:= application.Title +' '+ frm.caption;
   try
     if frm.ShowModal = mrOk then
       Result := AppUser.Loggedin;

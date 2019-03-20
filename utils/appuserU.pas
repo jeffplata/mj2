@@ -20,10 +20,7 @@ type
     FForm: string;
     FRole: string;
   protected
-    //function  GetOwner: TTaskList; reintroduce;
-    //procedure SetOwner(const Value: TTaskList); reintroduce;
   public
-    //property  Owner: TTaskList read GetOwner write SetOwner;
   published
     property Form: string read FForm write FForm;
     property Action: string read FAction write FAction;
@@ -40,8 +37,6 @@ type
   public
     property  Items[i:integer]: TTask read GetItems write SetItems;
     procedure Add(AObject:TTask); reintroduce;
-    //constructor Create; override;
-    //destructor Destroy; override;
   end;
 
   { TAppUser }
@@ -50,16 +45,22 @@ type
 
   private
     FLoggedin: Boolean;
+    FPassWord: string;
     FRoles: TStrings;
     FUserName: string;
   public
     constructor Create;
     destructor Destroy; override;
+    function Login: Boolean;
     function LoginByForm: Boolean;
-    function Login(const UserName, Password: string): Boolean;
+    function I_Login(const UserName, Password: string; remember: Boolean): Boolean;
+    procedure Logout;
     procedure ApplyRoles(Form: TComponent);
+    procedure ReadValues;
+    procedure SaveValues(UserName, Password: string; remember: boolean);
   published
     property UserName: string read FUserName write FUserName;
+    property PassWord: string read FPassWord write FPassWord;
     property Roles: TStrings read FRoles write FRoles;
     property Loggedin: Boolean read FLoggedin;
   end;
@@ -73,7 +74,7 @@ type
 
 implementation
 
-uses LoginForm, gConnectionu, ActnList, sqldb;
+uses LoginForm, gConnectionu, CryptU, strutils, IniFiles, ActnList, sqldb;
 
 function GetTasks: TTaskList;
 var
@@ -100,10 +101,6 @@ begin
        ATask.FAction:= Query.FieldByName('action').AsString;
        ATask.FRole:= Query.FieldByName('rolename').AsString;
        TaskList.Add(ATask);
-       //write(TTask(TaskList[TaskList.Count-1]).Form+ '  ');
-       //write(TTask(TaskList[TaskList.Count-1]).Action+ '  ');
-       //write(TTask(TaskList[TaskList.Count-1]).Role+ '  ');
-       //writeln();
        Query.Next;
      end;
   finally
@@ -130,29 +127,6 @@ begin
   inherited Add(AObject);
 end;
 
-//constructor TTaskList.Create;
-//begin
-//  inherited Create;
-//end;
-
-//destructor TTaskList.Destroy;
-//begin
-//  inherited Destroy;
-//end;
-
-{ TTask }
-
-//function TTask.GetOwner: TTaskList;
-//begin
-//  result := TTaskList(inherited GetOwner);
-//end;
-
-//procedure TTask.SetOwner(const Value: TTaskList);
-//begin
-//  inherited SetOwner(Value);
-//end;
-
-
 { TAppUser }
 
 constructor TAppUser.Create;
@@ -168,13 +142,28 @@ begin
   inherited Destroy;
 end;
 
+function TAppUser.Login: Boolean;
+begin
+  Result := False;
+  ReadValues;
+  if UserName='' then
+    Result := LoginByForm
+  else
+    Result := I_Login(UserName, PassWord, True);
+end;
+
 function TAppUser.LoginByForm: Boolean;
 begin
-  TfrmLogin.Execute;
+  ReadValues;
+  if UserName<>'' then
+    I_Login(UserName, PassWord, true);
+  if not FLoggedin then
+    TfrmLogin.Execute;
   Result := FLoggedin;
 end;
 
-function TAppUser.Login(const UserName, Password: string): Boolean;
+function TAppUser.I_Login(const UserName, Password: string; remember: Boolean
+  ): Boolean;
 var
   Query : TSQLQuery;
   Trans : TSQLTransaction;
@@ -217,7 +206,30 @@ begin
   //get tasks
   if FLoggedin then GetTasks;
 
+  //save values
+  SaveValues(UserName,Password,remember);
+
   Result := Floggedin;
+end;
+
+procedure TAppUser.Logout;
+var
+  fn: String;
+  ini: TIniFile;
+begin
+  FLoggedin:= false;
+  UserName:= '';
+  PassWord:= '';
+  FRoles.Clear;
+  TaskList.Clear;
+
+  fn := GetAppConfigFile(true);
+  ini := TIniFile.Create(fn);
+  try
+    ini.EraseSection('user');
+  finally
+    ini.free;
+  end;
 end;
 
 procedure TAppUser.ApplyRoles(Form: TComponent);
@@ -236,6 +248,60 @@ begin
                    (AppUser.Roles.IndexOf(TTask(TaskList[j]).Role) >= 0 );
           end;
       end;
+end;
+
+procedure TAppUser.ReadValues;
+var
+  fn , tk, us, pa: string;
+  ini : TIniFile;
+const
+  DELIM = '"';
+begin
+  UserName:='';
+  PassWord:='';
+
+  fn := GetAppConfigFile(true);
+  ini := TIniFile.Create(fn);
+  try
+    tk := ini.ReadString('user','token','');
+    if tk <> '' then
+      begin
+        tk := Decrypt(tk);
+        pa := ExtractDelimited(1,tk,[DELIM]);
+        us := ExtractDelimited(2,tk,[DELIM]);
+        pa := StringReplace(pa,'kirk;0;=',DELIM,[rfReplaceAll]);
+        us := StringReplace(us,'kirk;0;=',DELIM,[rfReplaceAll]);
+        if (us<>'') and (pa<>'') then
+        begin
+          UserName:= us;
+          PassWord:= pa;
+        end;
+      end;
+  finally
+    ini.free;
+  end;
+end;
+
+procedure TAppUser.SaveValues(UserName, Password: string; remember: boolean);
+var
+  fn , token: string;
+  ini : TIniFile;
+const
+  DELIM = '"';
+begin
+  UserName:= StringReplace(UserName,DELIM,'kirk;0;=',[rfReplaceAll]);;
+  Password:= StringReplace(Password,DELIM,'kirk;0;=',[rfReplaceAll]);
+  token := Encrypt(Password+DELIM+UserName);
+  fn := GetAppConfigFile(true);
+  ini := TIniFile.Create(fn);
+  try
+    if remember then
+      ini.WriteString('user','token',token)
+    else
+      ini.EraseSection('user');
+  finally
+    ini.free;
+  end;
 end;
 
 initialization

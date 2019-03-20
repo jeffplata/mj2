@@ -6,7 +6,7 @@
     <General>
       <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
-      <Title Value="mj2"/>
+      <Title Value="MJ2"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <Icon Value="0"/>
@@ -33,7 +33,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="8">
+    <Units Count="9">
       <Unit0>
         <Filename Value="mj2.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -84,6 +84,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit7>
+      <Unit8>
+        <Filename Value="utils\usermanagerform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmUserManager"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="UserManagerForm"/>
+      </Unit8>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -101,6 +108,11 @@
       <Debugging>
         <GenerateDebugInfo Value="False"/>
       </Debugging>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
     </Linking>
   </CompilerOptions>
   <Debugging>

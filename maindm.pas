@@ -14,13 +14,17 @@ type
   { TdmMain }
 
   TdmMain = class(TDataModule)
+    procedure DataModuleCreate(Sender: TObject);
   private
     FCurrentUser: TAppUser;
     function GetCurrentUser: TAppUser;
-  public
     property CurrentUser: TAppUser read GetCurrentUser write FCurrentUser;
+  public
     function OpenDatabase: Boolean;
     function Login: Boolean;
+    procedure LogOut;
+    function Loggedin: Boolean;
+    procedure ApplyRoles(Form: TComponent);
   end;
 
 var
@@ -34,6 +38,13 @@ uses gConnectionu
 {$R *.lfm}
 
 { TdmMain }
+
+procedure TdmMain.DataModuleCreate(Sender: TObject);
+begin
+  OpenDatabase;
+  if gConnection.Connected then
+    Login;
+end;
 
 function TdmMain.GetCurrentUser: TAppUser;
 begin
@@ -51,8 +62,23 @@ end;
 function TdmMain.Login: Boolean;
 begin
   Result := False;
-  if not AppUser.Loggedin then
-    Result := AppUser.LoginByForm;
+  if not CurrentUser.Loggedin then
+    Result := CurrentUser.LoginByForm;
+end;
+
+procedure TdmMain.LogOut;
+begin
+  CurrentUser.Logout;
+end;
+
+function TdmMain.Loggedin: Boolean;
+begin
+  result := CurrentUser.Loggedin;
+end;
+
+procedure TdmMain.ApplyRoles(Form: TComponent);
+begin
+  CurrentUser.ApplyRoles(Form);
 end;
 
 end.

@@ -7,15 +7,19 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, MainForm, SetDBForm, mainDM;
+  Forms, MainForm, SetDBForm, mainDM, UserManagerForm;
 
 {$R *.res}
 
 begin
+  Application.Title:='MJ2';
   RequireDerivedFormResource:=True;
   Application.Initialize;
   Application.CreateForm(TdmMain, dmMain);
-  Application.CreateForm(TfrmMain, frmMain);
-  Application.Run;
+  if dmMain.Loggedin then
+  begin
+    Application.CreateForm(TfrmMain, frmMain);
+    Application.Run;
+  end;
 end.
 

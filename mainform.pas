@@ -6,24 +6,30 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ActnList, DBGrids, Grids;
+  ActnList, ComCtrls, Menus;
 
 type
 
   { TfrmMain }
 
   TfrmMain = class(TForm)
-    actDummy: TAction;
+    actExit: TAction;
+    actLogin: TAction;
+    actLogout: TAction;
     actManageUser: TAction;
     ActionList1: TActionList;
-    Button1: TButton;
-    Button2: TButton;
-    Label1: TLabel;
-    Label2: TLabel;
-    Memo1: TMemo;
-    procedure actDummyExecute(Sender: TObject);
+    MainMenu1: TMainMenu;
+    MenuItem1: TMenuItem;
+    MenuItem11: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
+    StatusBar1: TStatusBar;
+    procedure actExitExecute(Sender: TObject);
+    procedure actLogoutExecute(Sender: TObject);
     procedure actManageUserExecute(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
 
@@ -36,49 +42,45 @@ var
 
 implementation
 
-uses mainDM
-//, CryptU
+uses mainDM, UserManagerForm
   ;
 
 {$R *.lfm}
 
 { TfrmMain }
 
-procedure TfrmMain.Button1Click(Sender: TObject);
-begin
-
-end;
 
 procedure TfrmMain.actManageUserExecute(Sender: TObject);
+var
+  frm: TfrmUserManager;
 begin
-  ShowMessage('manage users');
+  frm := TfrmUserManager.Create(nil);
+  frm.showmodal;
+  frm.free;
 end;
 
-procedure TfrmMain.actDummyExecute(Sender: TObject);
+procedure TfrmMain.actExitExecute(Sender: TObject);
 begin
-  showmessage('Dummy');
+  Close;
+end;
+
+procedure TfrmMain.actLogoutExecute(Sender: TObject);
+begin
+  //logout
+  dmMain.Logout;
+  dmMain.Login;
 end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  if dmMain.OpenDatabase
-  then
-    label1.Caption := 'Connected'
-  else begin
-    label1.caption := 'Not connected';
-  end;
-
-  dmMain.Login;
-
-  if dmMain.CurrentUser.Loggedin then
-    label2.Caption:= 'Logged in'
+  if dmMain.Loggedin then
+    StatusBar1.SimpleText:='Logged in'
   else
-    label2.caption := 'Not logged in';
+    StatusBar1.SimpleText:='Not logged in';
 
-  memo1.lines.Assign(dmMain.CurrentUser.Roles);
-
-  dmMain.CurrentUser.ApplyRoles(self);
+  dmMain.ApplyRoles(self);
 end;
+
 
 end.
 

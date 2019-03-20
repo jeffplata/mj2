@@ -1,0 +1,47 @@
+object frmUserManager: TfrmUserManager
+  Left = 384
+  Height = 220
+  Top = 237
+  Width = 451
+  Caption = 'User Manager'
+  ClientHeight = 220
+  ClientWidth = 451
+  LCLVersion = '1.8.2.0'
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 26
+    Top = 0
+    Width = 451
+    Caption = 'ToolBar1'
+    ShowCaptions = True
+    TabOrder = 0
+    object ToolButton1: TToolButton
+      Left = 1
+      Top = 2
+      Caption = 'Users'
+      Grouped = True
+      Style = tbsCheck
+    end
+    object ToolButton2: TToolButton
+      Left = 37
+      Top = 2
+      Caption = 'Roles'
+      Grouped = True
+      Style = tbsCheck
+    end
+    object ToolButton3: TToolButton
+      Left = 73
+      Top = 2
+      Caption = 'Tasks'
+      Grouped = True
+      Style = tbsCheck
+    end
+    object ToolButton4: TToolButton
+      Left = 110
+      Height = 22
+      Top = 2
+      Caption = 'ToolButton4'
+      Style = tbsSeparator
+    end
+  end
+end
