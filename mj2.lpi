@@ -22,24 +22,21 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="5">
+    <RequiredPackages Count="4">
       <Item1>
-        <PackageName Value="fortes324forlaz"/>
+        <PackageName Value="LazControls"/>
       </Item1>
       <Item2>
-        <PackageName Value="LazControls"/>
+        <PackageName Value="dcpcrypt"/>
       </Item2>
       <Item3>
-        <PackageName Value="dcpcrypt"/>
+        <PackageName Value="FCL"/>
       </Item3>
       <Item4>
-        <PackageName Value="FCL"/>
-      </Item4>
-      <Item5>
         <PackageName Value="LCL"/>
-      </Item5>
+      </Item4>
     </RequiredPackages>
-    <Units Count="10">
+    <Units Count="11">
       <Unit0>
         <Filename Value="mj2.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -102,9 +99,15 @@
         <Filename Value="utils\_templateform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="_TemplateForm"/>
       </Unit9>
+      <Unit10>
+        <Filename Value="utils\usermanager_bom.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UserManager_bom"/>
+      </Unit10>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

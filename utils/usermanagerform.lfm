@@ -7,6 +7,7 @@ object frmUserManager: TfrmUserManager
   Caption = 'User Manager'
   ClientHeight = 286
   ClientWidth = 455
+  OnCreate = FormCreate
   Position = poMainFormCenter
   LCLVersion = '1.8.2.0'
   object ToolBar1: TToolBar
@@ -26,21 +27,21 @@ object frmUserManager: TfrmUserManager
       Style = tbsCheck
     end
     object ToolButton2: TToolButton
-      Left = 36
+      Left = 37
       Top = 2
       Caption = 'Roles'
       Grouped = True
       Style = tbsCheck
     end
     object ToolButton3: TToolButton
-      Left = 70
+      Left = 73
       Top = 2
       Caption = 'Tasks'
       Grouped = True
       Style = tbsCheck
     end
     object ToolButton4: TToolButton
-      Left = 105
+      Left = 110
       Height = 22
       Top = 2
       Caption = 'ToolButton4'
@@ -79,48 +80,74 @@ object frmUserManager: TfrmUserManager
     end
   end
   object Panel1: TPanel
-    Left = 0
-    Height = 222
+    Left = 4
+    Height = 218
     Top = 26
-    Width = 281
+    Width = 277
     Align = alClient
+    BorderSpacing.Left = 4
+    BorderSpacing.Bottom = 4
     BevelOuter = bvNone
     Caption = 'Panel1'
-    ClientHeight = 222
-    ClientWidth = 281
+    ClientHeight = 218
+    ClientWidth = 277
     TabOrder = 2
-    object ListView1: TListView
+    object lvUsers: TListView
       Left = 0
-      Height = 198
+      Height = 194
       Top = 24
-      Width = 281
+      Width = 277
       Align = alBottom
       Anchors = [akTop, akLeft, akRight, akBottom]
       Columns = <>
+      ReadOnly = True
+      RowSelect = True
       TabOrder = 0
+      ViewStyle = vsReport
+      OnData = lvUsersData
+    end
+    object Label1: TLabel
+      Left = 0
+      Height = 15
+      Top = 8
+      Width = 31
+      Caption = 'Users'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
     end
   end
   object Panel3: TPanel
     Left = 285
-    Height = 222
+    Height = 218
     Top = 26
     Width = 170
     Align = alRight
     BorderSpacing.Left = 4
+    BorderSpacing.Bottom = 4
     BevelOuter = bvNone
     Caption = 'Panel3'
-    ClientHeight = 222
+    ClientHeight = 218
     ClientWidth = 170
     TabOrder = 3
     object ListView2: TListView
       Left = 0
-      Height = 198
+      Height = 194
       Top = 24
-      Width = 170
+      Width = 166
       Align = alBottom
       Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Right = 4
       Columns = <>
       TabOrder = 0
+    end
+    object Label2: TLabel
+      Left = 0
+      Height = 15
+      Top = 8
+      Width = 79
+      Caption = 'Assigned Roles'
+      ParentColor = False
     end
   end
 end
