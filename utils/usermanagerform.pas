@@ -61,7 +61,6 @@ procedure TfrmUserManager.lvRolesAssignedData(Sender: TObject; Item: TListItem);
 var
   ob: TUserRole;
 begin
-  writeln(TUser(lvUsers.Selected).UserName);
   ob := TUserRole(TUser(lvUsers.Selected).Roles[Item.Index]);
   Item.Caption := inttostr(ob.ID);
   Item.SubItems.Add(ob.Rolename);
