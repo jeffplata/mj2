@@ -100,11 +100,13 @@ object frmUserManager: TfrmUserManager
       Align = alBottom
       Anchors = [akTop, akLeft, akRight, akBottom]
       Columns = <>
+      OwnerData = True
       ReadOnly = True
       RowSelect = True
       TabOrder = 0
       ViewStyle = vsReport
       OnData = lvUsersData
+      OnSelectItem = lvUsersSelectItem
     end
     object Label1: TLabel
       Left = 0
@@ -130,7 +132,7 @@ object frmUserManager: TfrmUserManager
     ClientHeight = 218
     ClientWidth = 170
     TabOrder = 3
-    object ListView2: TListView
+    object lvRolesAssigned: TListView
       Left = 0
       Height = 194
       Top = 24
@@ -139,7 +141,10 @@ object frmUserManager: TfrmUserManager
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Right = 4
       Columns = <>
+      OwnerData = True
       TabOrder = 0
+      ViewStyle = vsReport
+      OnData = lvRolesAssignedData
     end
     object Label2: TLabel
       Left = 0

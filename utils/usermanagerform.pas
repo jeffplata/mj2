@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ExtCtrls, StdCtrls;
+  ComCtrls, ExtCtrls, StdCtrls, Menus;
 
 type
 
@@ -18,7 +18,7 @@ type
     Label1: TLabel;
     Label2: TLabel;
     lvUsers: TListView;
-    ListView2: TListView;
+    lvRolesAssigned: TListView;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
@@ -29,7 +29,10 @@ type
     ToolButton4: TToolButton;
     procedure Button4Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure lvRolesAssignedData(Sender: TObject; Item: TListItem);
     procedure lvUsersData(Sender: TObject; Item: TListItem);
+    procedure lvUsersSelectItem(Sender: TObject; Item: TListItem;
+      Selected: Boolean);
   private
     procedure LoadUserList;
   public
@@ -54,23 +57,38 @@ begin
   LoadUserList;
 end;
 
-procedure TfrmUserManager.lvUsersData(Sender: TObject; Item: TListItem);
-//var
-//  ob: TUser;
-//begin
-//  ob := TUser(UserList.Items[Item.Index]);
-//  Item.Caption := inttostr(ob.ID);
-//  Item.SubItems.Add(ob.UserName);
-//end;
+procedure TfrmUserManager.lvRolesAssignedData(Sender: TObject; Item: TListItem);
+var
+  ob: TUserRole;
 begin
-  Item.Caption:= QryUsers.FieldByName('id').AsString;
-  item.SubItems.Add(QryUsers.FieldByName('username').asstring);
+  writeln(TUser(lvUsers.Selected).UserName);
+  ob := TUserRole(TUser(lvUsers.Selected).Roles[Item.Index]);
+  Item.Caption := inttostr(ob.ID);
+  Item.SubItems.Add(ob.Rolename);
+end;
+
+
+procedure TfrmUserManager.lvUsersData(Sender: TObject; Item: TListItem);
+var
+  ob: TUser;
+begin
+  ob := TUser(UserList.Items[Item.Index]);
+  Item.Caption := inttostr(ob.ID);
+  Item.SubItems.Add(ob.UserName);
+end;
+
+procedure TfrmUserManager.lvUsersSelectItem(Sender: TObject; Item: TListItem;
+  Selected: Boolean);
+begin
+  lvRolesAssigned.Items.Count:= 2; //TUser(Item).Roles.Count;
+  lvRolesAssigned.Repaint;
 end;
 
 procedure TfrmUserManager.LoadUserList;
 var
   c: TListColumn;
 begin
+  //User columns
   c := lvUsers.Columns.Add;
   c.Caption:= 'ID';
   C.Width:= 50;
@@ -79,11 +97,17 @@ begin
   c.caption := 'User Name';
   c.width := 150;
 
-  //UserList.ReadList;
-  //lvUsers.Items.Count:= UserList.Count;
+  UserList.ReadList;
+  lvUsers.Items.Count:= UserList.Count;
 
-  OpenUsers;
-  lvUsers.Items.Count:= 3;
+  //roles columns
+  c := lvRolesAssigned.Columns.Add;
+  c.Caption:= 'ID';
+  c.Width:= 50;
+
+  c := lvRolesAssigned.Columns.Add;
+  c.caption := 'Role name';
+  c.width := 150;
 end;
 
 end.
