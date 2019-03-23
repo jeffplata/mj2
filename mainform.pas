@@ -69,12 +69,13 @@ begin
   dmMain.Logout;
   dmMain.Login;
   if not dmMain.Loggedin then actExit.Execute;
+  dmMain.ApplyRoles(self);
 end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   if dmMain.Loggedin then
-    StatusBar1.SimpleText:='Logged in'
+    StatusBar1.SimpleText:=GetAppConfigDir(true)
   else
     StatusBar1.SimpleText:='Not logged in';
 

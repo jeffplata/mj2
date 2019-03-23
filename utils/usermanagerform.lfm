@@ -27,25 +27,18 @@ object frmUserManager: TfrmUserManager
       Style = tbsCheck
     end
     object ToolButton2: TToolButton
-      Left = 37
+      Left = 36
       Top = 2
       Caption = 'Roles'
       Grouped = True
       Style = tbsCheck
     end
     object ToolButton3: TToolButton
-      Left = 73
+      Left = 70
       Top = 2
       Caption = 'Tasks'
       Grouped = True
       Style = tbsCheck
-    end
-    object ToolButton4: TToolButton
-      Left = 110
-      Height = 22
-      Top = 2
-      Caption = 'ToolButton4'
-      Style = tbsSeparator
     end
   end
   object Panel2: TPanel
@@ -83,76 +76,263 @@ object frmUserManager: TfrmUserManager
     Left = 4
     Height = 218
     Top = 26
-    Width = 277
+    Width = 252
     Align = alClient
     BorderSpacing.Left = 4
     BorderSpacing.Bottom = 4
     BevelOuter = bvNone
     Caption = 'Panel1'
     ClientHeight = 218
-    ClientWidth = 277
+    ClientWidth = 252
     TabOrder = 2
-    object lvUsers: TListView
-      Left = 0
-      Height = 194
-      Top = 24
-      Width = 277
-      Align = alBottom
-      Anchors = [akTop, akLeft, akRight, akBottom]
-      Columns = <>
-      OwnerData = True
-      ReadOnly = True
-      RowSelect = True
-      TabOrder = 0
-      ViewStyle = vsReport
-      OnData = lvUsersData
-      OnSelectItem = lvUsersSelectItem
-    end
     object Label1: TLabel
       Left = 0
-      Height = 15
+      Height = 13
       Top = 8
-      Width = 31
+      Width = 32
       Caption = 'Users'
       Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
     end
+    object Panel4: TPanel
+      Left = 0
+      Height = 194
+      Top = 24
+      Width = 252
+      Align = alBottom
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BevelOuter = bvNone
+      Caption = 'Panel4'
+      ClientHeight = 194
+      ClientWidth = 252
+      TabOrder = 0
+      object lvUsers: TListView
+        Left = 0
+        Height = 194
+        Top = 0
+        Width = 230
+        Align = alClient
+        AutoWidthLastColumn = True
+        Columns = <>
+        HideSelection = False
+        OwnerData = True
+        ReadOnly = True
+        RowSelect = True
+        TabOrder = 0
+        ViewStyle = vsReport
+        OnData = lvUsersData
+        OnSelectItem = lvUsersSelectItem
+      end
+      object ToolBar2: TToolBar
+        Left = 230
+        Height = 194
+        Top = 0
+        Width = 22
+        Align = alRight
+        Caption = 'ToolBar2'
+        EdgeInner = esNone
+        EdgeOuter = esNone
+        Images = ImageList1
+        TabOrder = 1
+        object ToolButton4: TToolButton
+          Left = 1
+          Top = 0
+          Action = actUserAdd
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton5: TToolButton
+          Left = 1
+          Top = 22
+          Action = actUserDelete
+          ParentShowHint = False
+          ShowHint = True
+        end
+      end
+    end
   end
   object Panel3: TPanel
-    Left = 285
+    Left = 260
     Height = 218
     Top = 26
-    Width = 170
+    Width = 191
     Align = alRight
     BorderSpacing.Left = 4
+    BorderSpacing.Right = 4
     BorderSpacing.Bottom = 4
     BevelOuter = bvNone
     Caption = 'Panel3'
     ClientHeight = 218
-    ClientWidth = 170
+    ClientWidth = 191
     TabOrder = 3
-    object lvRolesAssigned: TListView
-      Left = 0
-      Height = 194
-      Top = 24
-      Width = 166
-      Align = alBottom
-      Anchors = [akTop, akLeft, akRight, akBottom]
-      BorderSpacing.Right = 4
-      Columns = <>
-      OwnerData = True
-      TabOrder = 0
-      ViewStyle = vsReport
-      OnData = lvRolesAssignedData
-    end
     object Label2: TLabel
       Left = 0
-      Height = 15
+      Height = 13
       Top = 8
-      Width = 79
+      Width = 72
       Caption = 'Assigned Roles'
       ParentColor = False
     end
+    object Panel5: TPanel
+      Left = 0
+      Height = 194
+      Top = 24
+      Width = 191
+      Align = alBottom
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BevelOuter = bvNone
+      Caption = 'Panel5'
+      ClientHeight = 194
+      ClientWidth = 191
+      TabOrder = 0
+      object lvRolesAssigned: TListView
+        Left = 0
+        Height = 194
+        Top = 0
+        Width = 169
+        Align = alClient
+        AutoWidthLastColumn = True
+        Columns = <>
+        HideSelection = False
+        OwnerData = True
+        RowSelect = True
+        TabOrder = 0
+        ViewStyle = vsReport
+        OnData = lvRolesAssignedData
+        OnSelectItem = lvRolesAssignedSelectItem
+      end
+      object ToolBar3: TToolBar
+        Left = 169
+        Height = 194
+        Top = 0
+        Width = 22
+        Align = alRight
+        Caption = 'ToolBar3'
+        EdgeInner = esNone
+        EdgeOuter = esNone
+        Images = ImageList1
+        TabOrder = 1
+        object ToolButton6: TToolButton
+          Left = 1
+          Top = 0
+          Action = actUserRoleAdd
+          ParentShowHint = False
+          ShowHint = True
+        end
+        object ToolButton7: TToolButton
+          Left = 1
+          Top = 22
+          Action = actUserRoleDelete
+          ParentShowHint = False
+          ShowHint = True
+        end
+      end
+    end
+  end
+  object ActionList1: TActionList
+    Images = ImageList1
+    OnUpdate = ActionList1Update
+    left = 184
+    top = 32
+    object actUserAdd: TAction
+      Caption = 'U+'
+      GroupIndex = 1
+      Hint = 'Add User'
+      ImageIndex = 1
+      OnExecute = actUserAddExecute
+    end
+    object actUserDelete: TAction
+      Caption = 'U-'
+      GroupIndex = 1
+      Hint = 'Delete User'
+      ImageIndex = 0
+      OnExecute = actUserDeleteExecute
+    end
+    object actUserRoleAdd: TAction
+      Caption = 'R+'
+      GroupIndex = 2
+      Hint = 'Add Assigned Role'
+      ImageIndex = 1
+      OnExecute = actUserRoleAddExecute
+    end
+    object actUserRoleDelete: TAction
+      Caption = 'R-'
+      GroupIndex = 2
+      Hint = 'Delete Assigned Role'
+      ImageIndex = 0
+      OnExecute = actUserRoleDeleteExecute
+    end
+  end
+  object ImageList1: TImageList
+    left = 136
+    top = 32
+    Bitmap = {
+      4C69020000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FC00FFFFF7008A6245008A6245008A6245008A624500FFFFF700FFFFFC00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FB00FFFFF2008A624500CFAC8B00CFAC8B008A624500FFFFF200FFFFFA00FFFF
+      FF00FFFFFE00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFC00FFFFFB00FFFF
+      F500FFFFED008A624500CFAC8B00CFAC8B008A624500FFFFEB00FFFFF500FFFF
+      F900FFFFFC00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFF700FFFFF200FFFF
+      EB00FFFFE6008A624500CFAC8B00CFAC8B008A624500FFFFE600FFFFEB00FFFF
+      F100FFFFF700FFFFFF00FFFFFF00FFFFFF00FFFFFF008A6245FF8A6245FF8A62
+      45FF8A6245FF8A6245FF8A6245FF8A6245FF8A6245FF8A6245FF8A6245FF8A62
+      45FF8A6245FFFFFFFF00FFFFFF00FFFFFF00FFFFFF008A6245FFE8CDB8FFE8CD
+      B8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CD
+      B8FF8A6245FFFFFFFF00FFFFFF00FFFFFF00FFFFFF008A6245FFE8CDB8FFE8CD
+      B8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CD
+      B8FF8A6245FFFFFFFF00FFFFFF00FFFFFF00FFFFFF008A6245FF8A6245FF8A62
+      45FF8A6245FF8A6245FF8A6245FF8A6245FF8A6245FF8A6245FF8A6245FF8A62
+      45FF8A6245FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFF800FFFFF200FFFF
+      ED00FFFFE6008A624500CFAC8B00CFAC8B008A624500FFFFE600FFFFED00FFFF
+      F200FFFFF700FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFC00FFFFFB00FFFF
+      F500FFFFED008A624500CFAC8B00CFAC8B008A624500FFFFEB00FFFFF500FFFF
+      FB00FFFFFC00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FB00FFFFF2008A624500CFAC8B00CFAC8B008A624500FFFFF200FFFFFB00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FC00FFFFF7008A6245008A6245008A6245008A624500FFFFF700FFFFFC00FDFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FC00FFFFF7008A6245FF8A6245FF8A6245FF8A6245FFFFFFF700FFFFFC00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FB00FFFFF2008A6245FFE8CDB8FFE8CDB8FF8A6245FFFFFFF200FFFFFA00FFFF
+      FF00FFFFFE00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFC00FFFFFB00FFFF
+      F500FFFFED008A6245FFE8CDB8FFE8CDB8FF8A6245FFFFFFEB00FFFFF500FFFF
+      F900FFFFFC00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFF700FFFFF200FFFF
+      EB00FFFFE6008A6245FFE8CDB8FFE8CDB8FF8A6245FFFFFFE600FFFFEB00FFFF
+      F100FFFFF700FFFFFF00FFFFFF00FFFFFF00FFFFFF008A6245FF8A6245FF8A62
+      45FF8A6245FF8A6245FFE8CDB8FFE8CDB8FF8A6245FF8A6245FF8A6245FF8A62
+      45FF8A6245FFFFFFFF00FFFFFF00FFFFFF00FFFFFF008A6245FFE8CDB8FFE8CD
+      B8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CD
+      B8FF8A6245FFFFFFFF00FFFFFF00FFFFFF00FFFFFF008A6245FFE8CDB8FFE8CD
+      B8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CDB8FFE8CD
+      B8FF8A6245FFFFFFFF00FFFFFF00FFFFFF00FFFFFF008A6245FF8A6245FF8A62
+      45FF8A6245FF8A6245FFE8CDB8FFE8CDB8FF8A6245FF8A6245FF8A6245FF8A62
+      45FF8A6245FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFF800FFFFF200FFFF
+      ED00FFFFE6008A6245FFE8CDB8FFE8CDB8FF8A6245FFFFFFE600FFFFED00FFFF
+      F200FFFFF700FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFC00FFFFFB00FFFF
+      F500FFFFED008A6245FFE8CDB8FFE8CDB8FF8A6245FFFFFFEB00FFFFF500FFFF
+      FB00FFFFFC00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FB00FFFFF2008A6245FFE8CDB8FFE8CDB8FF8A6245FFFFFFF200FFFFFB00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FC00FFFFF7008A6245FF8A6245FF8A6245FF8A6245FFFFFFF700FFFFFC00FDFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00
+    }
   end
 end

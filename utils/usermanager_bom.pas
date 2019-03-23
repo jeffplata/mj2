@@ -5,7 +5,7 @@ unit UserManager_bom;
 interface
 
 uses
-  Classes, SysUtils, contnrs
+  Classes, SysUtils, HiLoGeneratorU, contnrs
   , sqldb
   ;
 
@@ -66,31 +66,33 @@ type
     property  Items[i:integer]: TUser read GetItems write SetItems;
     procedure Add(AObject:TUser); reintroduce;
     function ReadList: TUserList;
+    function DBAdd(index:integer): boolean;
+    function DBDelete(index:integer): Boolean;
   end;
 
   var
     UserList: TUserList;
     //UserRoleList: TUserRoleList;
 
-    QryUsers: TSQLQuery;
-    QryUserRoles: TSQLQuery;
-    Transaction: TSQLTransaction;
+    //QryUsers: TSQLQuery;
+    //QryUserRoles: TSQLQuery;
+    //Transaction: TSQLTransaction;
 
-function OpenUsers: boolean;
+//function OpenUsers: boolean;
 
 implementation
 
 uses gConnectionu;
 
-function OpenUsers: boolean;
-begin
-  QryUsers.SQL.Add('select id, username from usr_user');
-  try
-    QryUsers.Open;
-    Result := True;
-  finally
-  end;
-end;
+//function OpenUsers: boolean;
+//begin
+//  QryUsers.SQL.Add('select id, username from usr_user');
+//  try
+//    QryUsers.Open;
+//    Result := True;
+//  finally
+//  end;
+//end;
 
 { TUser }
 
@@ -153,7 +155,6 @@ var
 
 begin
   UserList.Clear;
-  //UserRoleList.Clear;
 
   sl := TStringList.Create;
 
@@ -162,7 +163,6 @@ begin
   q := TSQLQuery.Create(nil);
   q.DataBase := gConnection;
   q.Transaction := t;
-  //q.SQL.Add('select id, username from usr_user');
   q.SQL.Add('select u.id, u.username, ');
   q.SQL.Add('  (select list(r.id||'',''||r.rolename) from usr_role r ');
   q.SQL.Add('   join USR_USERROLE ur on ur.ROLE_ID=r.ID ');
@@ -200,26 +200,57 @@ begin
   Result := UserList;
 end;
 
+function TUserList.DBAdd(index: integer): boolean;
+var
+  q: TSQLQuery;
+  t: TSQLTransaction;
+begin
+  t := TSQLTransaction.Create(nil);
+  t.DataBase := gConnection;
+  q := TSQLQuery.Create(nil);
+  q.DataBase := gConnection;
+  q.Transaction := t;
+  q.SQL.Add('insert into usr_user(id, username, password) values (:id,:username,:password)');
+  try
+    q.params.ParamByName('id').AsInteger:= UserList.Items[index].ID;
+    q.params.ParamByName('username').AsString:= UserList.Items[index].UserName;
+    q.params.ParamByName('password').AsString:= 'password';
+    q.ExecSQL;
+    t.Commit;
+    Result := True;
+  finally
+    q.free;
+    t.free;
+  end;
+end;
+
+function TUserList.DBDelete(index: integer): Boolean;
+var
+  q: TSQLQuery;
+  t: TSQLTransaction;
+begin
+  t := TSQLTransaction.Create(nil);
+  t.DataBase := gConnection;
+  q := TSQLQuery.Create(nil);
+  q.DataBase := gConnection;
+  q.Transaction := t;
+  q.SQL.Add('delete from usr_user where id=:id');
+  try
+    q.params.ParamByName('id').AsInteger:= UserList.Items[index].ID;
+    q.ExecSQL;
+    t.Commit;
+    Result := True;
+  finally
+    q.free;
+    t.free;
+  end;
+end;
+
 initialization
   UserList := TUserList.Create;
-  //UserRoleList := TUserRoleList.create;
-
-  //Transaction := TSQLTransaction.Create(gConnection);
-  //Transaction.DataBase := gConnection;
-  //QryUsers := TSQLQuery.Create(nil);
-  //QryUsers.DataBase := gConnection;
-  //QryUsers.Transaction := Transaction;
-  //QryUserRoles  := TSQLQuery.Create(nil);
-  //QryUserRoles.DataBase := gConnection;
-  //QryUserRoles.Transaction := Transaction;
 
 finalization
   UserList.Free;
-  //UserRoleList.free;
-
-  //QryUsers.Free;
-  //QryUserRoles.Free;
-  //Transaction.Free;
 
 end.
 

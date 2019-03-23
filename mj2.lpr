@@ -8,7 +8,7 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, MainForm, SetDBForm, mainDM, lazcontrols,
-  UserManagerForm, _TemplateForm, usermanager_bom;
+  UserManagerForm, _TemplateForm, usermanager_bom, HiLoGeneratorU;
 
 {$R *.res}
 
