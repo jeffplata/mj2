@@ -47,6 +47,7 @@ type
     procedure actUserRoleDeleteExecute(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure lvRolesAssignedData(Sender: TObject; Item: TListItem);
     procedure lvRolesAssignedSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
@@ -54,31 +55,18 @@ type
     procedure lvUsersSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
   private
-    SelectedUserIndex : integer;
-    SelectedUserRoleIndex : integer;
+    //SelectedUserIndex : integer;
+    //SelectedRoleIndex : integer;
     procedure LoadUserList;
+    procedure ListViewUpdate( lv: TListView; ItemCount: integer; SelectedIndex: integer );
   public
 
   end;
 
-  procedure ListViewUpdateSelected( lv: TListView; ItemCount: integer; var SelectedIndex: integer );
 
 implementation
 
-uses usermanager_bom, HiLoGeneratorU;
-
-procedure ListViewUpdateSelected(lv: TListView; ItemCount: integer;
-  var SelectedIndex: integer);
-begin
-  lv.Items.Count:= ItemCount;
-  if SelectedIndex >= ItemCount then
-    SelectedIndex:= ItemCount -1;
-  if SelectedIndex <> -1 then
-    lv.ItemIndex := SelectedIndex;
-  //lv.Refresh;
-  lv.Items[SelectedIndex].MakeVisible(true);
-end;
-
+uses usermanager_bom, HiLoGeneratorU, usermanager_add_userroleform;
 
 {$R *.lfm}
 
@@ -98,12 +86,15 @@ begin
   s := InputBox('New User','User name:','');
   if s <> '' then
     begin
-      u := TUser.create;
+      u := TUser.create(UserList);
       u.id := AppHiloGenerator.GetNextID;
       u.UserName:= s;
       UserList.add(u);
       lvUsers.Items.count := userlist.count;
-      UserList.DBAdd(userlist.count-1);
+      lvUsers.ItemIndex:= userlist.count-1;  //end of list
+      UserList.DBAdd(u); //(userlist.count-1);  //<==
+      //UserList.SelectedUser := u;
+      //u.Select(userlist.count-1);
     end;
 end;
 
@@ -111,53 +102,97 @@ procedure TfrmUserManager.ActionList1Update(AAction: TBasicAction;
   var Handled: Boolean);
 begin
   if AAction = actUserDelete then
-    actUserDelete.Enabled:= lvUsers.ItemIndex <> -1
+    actUserDelete.Enabled:= (lvUsers.Selected <> nil)
   else if aaction =actUserRoleDelete then
-    actUserRoleDelete.Enabled:= lvRolesAssigned.ItemIndex <> -1;
+    actUserRoleDelete.Enabled:= (lvRolesAssigned.Selected <> nil)
+  else if aaction = actUserRoleAdd then
+    actUserRoleAdd.enabled := (lvUsers.Selected <> nil)
 end;
 
 procedure TfrmUserManager.actUserRoleAddExecute(Sender: TObject);
 var
   s: String;
-  u: TUserRole;
+  ar: TAssignedRole;
+  indSelected: Integer;
+  u: tuser;
 begin
   //user role add
-  s := InputBox('Add User Role','Role Name:','');
-  if s <> '' then
+  //s := InputBox('Add User Role','Role Name:','');
+  indSelected := TfrmUserRole.SelectRole;
+  //if s <> '' then
+  if indSelected <> -1 then
     begin
-      u := TUserRole.create;
-      u.id := AppHiloGenerator.GetNextID;
-      u.rolename:= s;
-      UserList.items[SelectedUserIndex].roles.add(u);
-      lvRolesAssigned.Items.count := UserList.items[SelectedUserIndex].roles.count;
-      lvRolesAssigned.ItemIndex:= lvRolesAssigned.Items.count -1;
+      ar := TAssignedRole.create(UserList);
+      ar.id := AppHiloGenerator.GetNextID;
+      //ar.rolename:= s;
+      ar.RoleID:= RoleList.items[indSelected].ID;
+      ar.Rolename:= RoleList.items[indSelected].Rolename;
+
+      u := UserList.Items[lvUsers.ItemIndex];
+      u.roles.add(ar);
+      lvRolesAssigned.Items.count := u.roles.count;
+      lvRolesAssigned.ItemIndex:= u.roles.count -1;
+      u.roles.DBAdd(ar, u.ID);
+
+      //ListViewUpdate(lvRolesAssigned, u.roles.Count, lvRolesAssigned.ItemIndex);
+      //
+      //
+      ////UserList.items[SelectedUserIndex].roles.add(ar);
+      //UserList.SelectedUser.Roles.Add(ar);
+      //lvRolesAssigned.Items.count := UserList.SelectedUser.Roles.Count;// UserList.items[SelectedUserIndex].roles.count;
+      //lvRolesAssigned.ItemIndex:= lvRolesAssigned.Items.count -1;
+      ////UserList.items[SelectedUserIndex].roles.DBAdd(
+      //  //UserList.items[SelectedUserIndex].roles.count-1);  //<==
+      //if UserList.SelectedUser.Roles.DBAdd( UserList.SelectedUser.Roles.Count-1 ) then
+      //  UserList.SelectedRole := ar;
     end;
 end;
 
 procedure TfrmUserManager.actUserDeleteExecute(Sender: TObject);
+var
+  ItemIndex: Integer;
+  ra: TAssignedRoleList;
 begin
   //user delete
-  if UserList.DBDelete(SelectedUserIndex) then
-  begin
-    UserList.Delete(SelectedUserIndex);
-    ListViewUpdateSelected(lvUsers, UserList.Count, SelectedUserIndex);
+  if UserList.DBDelete(lvUsers.ItemIndex) then
+    begin
+      ItemIndex := lvUsers.ItemIndex;
+      ra := UserList.items[ItemIndex].Roles;
+      ListViewUpdate(lvUsers, UserList.Count, ItemIndex);
+      ListViewUpdate(lvRolesAssigned,ra.Count,0);
+    end;
 
-    if UserList.Count = 0 then
-      lvRolesAssigned.items.count := 0
-    else
-      lvRolesAssigned.items.count := UserList.items[SelectedUserIndex].Roles.Count;
-    SelectedUserRoleIndex:= -1;
-  end;
+  //if UserList.DBDelete(SelectedUserIndex) then  //<==
+  //begin
+  //  UserList.Delete(SelectedUserIndex);
+  //  ListViewUpdate(lvUsers, UserList.Count, SelectedUserIndex);
+  //
+  //  if UserList.Count = 0 then
+  //    lvRolesAssigned.items.count := 0
+  //  else
+  //    lvRolesAssigned.items.count := UserList.items[SelectedUserIndex].Roles.Count;
+  //  SelectedRoleIndex:= -1;
+  //end;
 end;
 
 procedure TfrmUserManager.actUserRoleDeleteExecute(Sender: TObject);
 var
   u: TUser;
+  ItemIndex: integer;
 begin
   //user role delete
-  u := UserList.Items[SelectedUserIndex];
-  u.roles.delete(SelectedUserRoleIndex);
-  ListViewUpdateSelected(lvRolesAssigned, u.roles.count, SelectedUserRoleIndex);
+  //if UserList.SelectedUser.Roles.DBDelete(0) then
+  //begin
+  //  u := UserList.Items[SelectedUserIndex];
+  //  u.roles.delete(SelectedRoleIndex);
+  //  ListViewUpdate(lvRolesAssigned, u.roles.count, SelectedRoleIndex);
+  //end;
+  u := UserList.Items[lvUsers.ItemIndex];
+  if u.Roles.DBDelete(lvRolesAssigned.ItemIndex, lvUsers.itemindex) then
+    begin
+      ItemIndex := lvRolesAssigned.ItemIndex;
+      ListViewUpdate(lvRolesAssigned, u.roles.count, ItemIndex);
+    end;
 end;
 
 procedure TfrmUserManager.FormCreate(Sender: TObject);
@@ -165,22 +200,30 @@ begin
   LoadUserList;
 end;
 
+procedure TfrmUserManager.FormShow(Sender: TObject);
+begin
+  ListViewUpdate(lvUsers, UserList.Count, 0);
+end;
+
 procedure TfrmUserManager.lvRolesAssignedData(Sender: TObject; Item: TListItem);
 var
-  ob: TUserRole;
+  ar: TAssignedRole;
   u : tuser;
 begin
-  u := TUser(UserList.Items[SelectedUserIndex]) ;
+  //u := UserList.Items[SelectedUserIndex] ;
+  u := UserList.Items[lvUsers.ItemIndex] ;
   if u = nil then exit;
 
-  ob := TUserRole(u.Roles[Item.Index]);
-  item.caption := ob.Rolename;
+  ar := u.Roles.items[Item.Index];
+  item.caption := ar.Rolename;
 end;
 
 procedure TfrmUserManager.lvRolesAssignedSelectItem(Sender: TObject;
   Item: TListItem; Selected: Boolean);
 begin
-  SelectedUserRoleIndex := Item.Index;
+  //SelectedRoleIndex := Item.Index;
+  //UserList.SelectedRole := UserList.SelectedUser.Roles.Items[SelectedRoleIndex];
+  //UserList.SelectedUser.Roles.Items[Item.Index].Select(Item.Index);
 end;
 
 
@@ -198,11 +241,17 @@ procedure TfrmUserManager.lvUsersSelectItem(Sender: TObject; Item: TListItem;
 var
   u: TUser;
 begin
-  SelectedUserIndex := Item.Index;
-  u := TUser(UserList.Items[Item.Index]);
+  //UserList.SelectedUser := TUser(UserList.Items[Item.Index]);
+  //UserList.Items[Item.Index].Select(Item.Index);
+
+  //SelectedUserIndex := Item.Index;
+  //u := TUser(UserList.Items[Item.Index]);
+  //lvRolesAssigned.Items.Count:= u.roles.count;
+  u := UserList.Items[item.index];
   lvRolesAssigned.Items.Count:= u.roles.count;
-  lvRolesAssigned.Repaint;
-  SelectedUserRoleIndex:= -1 ;
+  ListViewUpdate(lvRolesAssigned,u.roles.Count,0);
+  //lvRolesAssigned.Repaint;
+  //SelectedRoleIndex:= -1 ;
 end;
 
 procedure TfrmUserManager.LoadUserList;
@@ -218,6 +267,7 @@ begin
   c.caption := 'User Name';
   c.width := 150;
 
+  RoleList.ReadList;
   UserList.ReadList;
   lvUsers.Items.Count:= UserList.Count;
 
@@ -232,6 +282,23 @@ begin
 
   lvRolesAssigned.Items.Count:= UserList.Items[0].Roles.Count;
 end;
+
+procedure TfrmUserManager.ListViewUpdate(lv: TListView;
+  ItemCount: integer; SelectedIndex: integer);
+var
+  newIndex: Integer;
+begin
+  lv.Items.Count:= ItemCount;
+  newIndex := SelectedIndex;
+  if newIndex >= ItemCount then
+    newIndex := ItemCount -1;
+  if newIndex >= 0 then
+    lv.ItemIndex := newIndex;
+  if newIndex >= 0 then
+    lv.Items[newIndex].MakeVisible(true);
+  lv.Repaint;
+end;
+
 
 end.
 

@@ -26,12 +26,10 @@ type
 
   TMyHiLoGenerator = class(TComponent)
   private
-    //FFileName: string;
     FHighIDGenerator: string;
     FIDHigh: Integer;
     FIDLow: Integer;
     FSQLConnection: TgConnection;
-    //procedure SetFileName(const Value: string);
     procedure I_SaveLoad(operation: TSaveOperation);
   public
     constructor Create(const AOwner: TComponent);
@@ -40,7 +38,6 @@ type
     procedure Save;
     procedure Load;
   published
-    //property FileName: string read FFileName write SetFileName;
     property HighIDGenerator: string read FHighIDGenerator write FHighIDGenerator;
     property SQLConnection: TgConnection read FSQLConnection write FSQLConnection;
     property IDHigh: Integer read FIDHigh write FIDHigh;
@@ -69,8 +66,6 @@ uses
 constructor TMyHiLoGenerator.Create(const AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  //FPropertySave := TPropertySave.Create(Self);
-  //FPropertySave.Section := 'HILOPK';
 end;
 
 destructor TMyHiLoGenerator.Destroy;
@@ -128,8 +123,6 @@ const
 begin
   HighID := FIDHigh;
   LowID := FIDLow + 1;
-  writeln(highid);
-  writeln(lowid);
   if ((LowID = 0) OR (LowID > MAXLOWID) OR (HighID = 0)) then begin
     HighID := GetNextHighFromDB;
     if HighID = -1 then
@@ -147,31 +140,13 @@ end;
 
 procedure TMyHiLoGenerator.Save;
 begin
-  //if FPropertySave.Properties.Count = 0 then
-  //begin
-  //  FPropertySave.AddProperty(AppHiloGenerator,'IDHigh');
-  //  FPropertySave.AddProperty(AppHiloGenerator,'IDLow');
-  //end;
-  //FPropertySave.Save;
   I_SaveLoad(soSave);
 end;
 
 procedure TMyHiLoGenerator.Load;
 begin
-  //if FPropertySave.Properties.Count = 0 then
-  //begin
-  //  FPropertySave.AddProperty(AppHiloGenerator,'IDHigh');
-  //  FPropertySave.AddProperty(AppHiloGenerator,'IDLow');
-  //end;
-  //FPropertySave.Load;
   I_SaveLoad(soLoad);
 end;
-
-//procedure TMyHiLoGenerator.SetFileName(const Value: string);
-//begin
-//  FFileName := Value;
-//  FPropertySave.Filename := FFileName;
-//end;
 
 procedure TMyHiLoGenerator.I_SaveLoad(operation: TSaveOperation);
 var

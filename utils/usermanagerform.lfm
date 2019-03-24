@@ -3,11 +3,13 @@ object frmUserManager: TfrmUserManager
   Height = 286
   Top = 265
   Width = 455
+  ActiveControl = lvUsers
   BorderIcons = [biSystemMenu]
   Caption = 'User Manager'
   ClientHeight = 286
   ClientWidth = 455
   OnCreate = FormCreate
+  OnShow = FormShow
   Position = poMainFormCenter
   LCLVersion = '1.8.2.0'
   object ToolBar1: TToolBar

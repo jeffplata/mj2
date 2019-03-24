@@ -36,7 +36,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="12">
+    <Units Count="13">
       <Unit0>
         <Filename Value="mj2.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -112,6 +112,13 @@
         <Filename Value="utils\HiLoGeneratorU.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit11>
+      <Unit12>
+        <Filename Value="utils\usermanager_add_userroleform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmUserRole"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit12>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
