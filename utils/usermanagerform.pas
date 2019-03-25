@@ -162,15 +162,11 @@ begin
 end;
 
 procedure TfrmUserManager.actRoleDeleteExecute(Sender: TObject);
-var
-  ItemIndex: Integer;
 begin
-  //role delete
   if RoleList.DBDelete(lvRoles.ItemIndex) then
-    begin
-      ItemIndex := lvRoles.ItemIndex;
-      ListViewUpdate(lvRoles, RoleList.Count, ItemIndex);
-    end;
+    ListViewUpdate(lvRoles, RoleList.Count, lvRoles.ItemIndex)
+  else
+    Showmessage('This Role cannot be deleted.'#13#10'Users are assigned to it.');
 end;
 
 procedure TfrmUserManager.actTabRolesExecute(Sender: TObject);
@@ -214,15 +210,13 @@ end;
 
 procedure TfrmUserManager.actUserDeleteExecute(Sender: TObject);
 var
-  ItemIndex: Integer;
   ra: TAssignedRoleList;
 begin
-  //user delete
   if UserList.DBDelete(lvUsers.ItemIndex) then
     begin
-      ItemIndex := lvUsers.ItemIndex;
-      ra := UserList.items[ItemIndex].Roles;
-      ListViewUpdate(lvUsers, UserList.Count, ItemIndex);
+      //Update the lv so that itemindex is properly set
+      ListViewUpdate(lvUsers, UserList.Count, lvUsers.ItemIndex);
+      ra := UserList.items[lvUsers.ItemIndex].Roles;
       ListViewUpdate(lvRolesAssigned,ra.Count,0);
     end;
 end;

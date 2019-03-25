@@ -1,0 +1,5 @@
+
+
+8:13 PM 3/25/2019
+Listview.ItemIndex is not automatically set after deleting the last item
+in a listview. See userdelete for example

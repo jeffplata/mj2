@@ -82,6 +82,8 @@ type
     property ID: integer read FID write FID;
     property UserName: string read FUserName write FUserName;
     property Roles: TAssignedRoleList read FRoles write FRoles;
+    //todo: tuser: include an active/inactive status
+    //when deleting make sure only inactive can be deleted
   end;
 
   { TAssignedRoleList }
@@ -185,6 +187,7 @@ var
   t: TSQLTransaction;
   role: TRole;
 begin
+  Result := False;
   role := RoleList.Items[index];
 
   t := TSQLTransaction.Create(nil);
@@ -192,9 +195,16 @@ begin
   q := TSQLQuery.Create(nil);
   q.DataBase := gConnection;
   q.Transaction := t;
-  q.SQL.Add('delete from usr_role where id=:id');
   try
-    q.params.ParamByName('id').AsInteger:= role.ID; // Items[index].ID;
+    q.sql.add('select first 1 role_id from usr_userrole where role_id=:role_id');
+    q.params.parambyname('role_id').asinteger := role.ID;
+    q.Open;
+    if q.RecordCount > 0 then exit;
+
+    q.close;
+    q.SQL.clear;
+    q.SQL.Add('delete from usr_role where id=:id');
+    q.params.ParamByName('id').AsInteger:= role.ID;
     q.ExecSQL;
     t.Commit;
 
@@ -222,7 +232,7 @@ begin
   q := TSQLQuery.Create(nil);
   q.DataBase := gConnection;
   q.Transaction := t;
-  q.SQL.Add('select id, rolename from usr_role ');
+  q.SQL.Add('select id, rolename from usr_role order by id');
 
   try
     q.Open;
