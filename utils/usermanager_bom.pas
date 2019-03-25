@@ -19,10 +19,15 @@ type
   TRole = class;
   TRoleList = class;
 
+  //trole
   TRole = class(TObject)
   private
     FID: integer;
+    FOwnerList: TRoleList;
     FRolename: string;
+  public
+    constructor Create(AOwnerList:TRoleList);
+    property OwnerList: TRoleList read FOwnerList write FOwnerList;
   published
     property ID: integer read FID write FID;
     property Rolename: string read FRolename write FRolename;
@@ -38,8 +43,10 @@ type
   public
     property  Items[i:integer]: TRole read GetItems write SetItems;
     procedure Add(AObject:TRole); reintroduce;
-    function DBAdd(index:integer): boolean;
+    function DBAdd(role:TRole): boolean;
+    function DBDelete(index:integer): boolean;
     function ReadList: TRoleList;
+    function UniqueItem(s:string): boolean;
   end;
 
   { TAssignedRole }
@@ -53,7 +60,6 @@ type
   public
     constructor Create(AOwnerList:TUserList);
     property OwnerList: TUserList read FOwnerList write FOwnerList;
-    procedure Select(index:integer);
   published
     property ID: integer read FID write FID;
     property Rolename: string read FRolename write FRolename;
@@ -71,7 +77,6 @@ type
   public
     constructor Create(AOwner: TObjectList);
     destructor Destroy; override;
-    procedure Select(index:integer);
     property OwnerList: TUserList read FOwnerList write FOwnerList;
   published
     property ID: integer read FID write FID;
@@ -97,10 +102,7 @@ type
 
   TUserList = class(TObjectList)
   private
-    FSelectedUser: TUser;
-    FSelectedRole: TAssignedRole;
-    FSelectedUserIndex: integer;
-    FSelectedRoleIndex: Integer;
+
   protected
     function  GetItems(i: integer): TUser; reintroduce;
     procedure SetItems(i: integer; const Value: TUser); reintroduce;
@@ -110,10 +112,6 @@ type
     function ReadList: TUserList;
     function DBAdd(u:TUser): boolean;
     function DBDelete(index:integer): Boolean;
-    property SelectedUser: TUser read FSelectedUser write FSelectedUser;
-    property SelectedRole: TAssignedRole read FSelectedRole write FSelectedRole;
-    property SelectedUserIndex: integer read FSelectedUserIndex write FSelectedUserIndex;
-    property SelectedRoleIndex: Integer read FSelectedRoleIndex write FSelectedRoleIndex;
   end;
 
   var
@@ -124,18 +122,21 @@ implementation
 
 uses gConnectionu;
 
+{ TRole }
+
+constructor TRole.Create(AOwnerList: TRoleList);
+begin
+  inherited Create;
+  FOwnerList := AOwnerList;
+end;
+
+
 { TAssignedRole }
 
 constructor TAssignedRole.Create(AOwnerList: TUserList);
 begin
   inherited Create;
   FOwnerList := TUserList(AOwnerList);
-end;
-
-procedure TAssignedRole.Select(index: integer);
-begin
-  FOwnerList.SelectedRole := Self;
-  FOwnerList.SelectedRoleIndex:= index;
 end;
 
 { TRoleList }
@@ -155,9 +156,56 @@ begin
   inherited Add(AObject);
 end;
 
-function TRoleList.DBAdd(index: integer): boolean;
+function TRoleList.DBAdd(role: TRole): boolean;
+var
+  q: TSQLQuery;
+  t: TSQLTransaction;
 begin
-  //add role
+  t := TSQLTransaction.Create(nil);
+  t.DataBase := gConnection;
+  q := TSQLQuery.Create(nil);
+  q.DataBase := gConnection;
+  q.Transaction := t;
+  q.SQL.Add('insert into usr_role(id, rolename) values (:id,:rolename)');
+  try
+    q.params.ParamByName('id').AsInteger:= role.ID;
+    q.params.ParamByName('rolename').AsString:= role.RoleName;
+    q.ExecSQL;
+    t.Commit;
+    Result := True;
+  finally
+    q.free;
+    t.free;
+  end;
+end;
+
+function TRoleList.DBDelete(index: integer): boolean;
+var
+  q: TSQLQuery;
+  t: TSQLTransaction;
+  role: TRole;
+begin
+  role := RoleList.Items[index];
+
+  t := TSQLTransaction.Create(nil);
+  t.DataBase := gConnection;
+  q := TSQLQuery.Create(nil);
+  q.DataBase := gConnection;
+  q.Transaction := t;
+  q.SQL.Add('delete from usr_role where id=:id');
+  try
+    q.params.ParamByName('id').AsInteger:= role.ID; // Items[index].ID;
+    q.ExecSQL;
+    t.Commit;
+
+    //list update
+    Delete(index);
+
+    Result := True;
+  finally
+    q.free;
+    t.free;
+  end;
 end;
 
 function TRoleList.ReadList: TRoleList;
@@ -180,7 +228,7 @@ begin
     q.Open;
     while not q.eof do
     begin
-      o := trole.Create;
+      o := trole.Create(RoleList);
       o.id        := q.fields[0].asinteger;
       o.rolename  := q.fields[1].asstring;
 
@@ -192,6 +240,17 @@ begin
     t.Free;
   end;
   Result := RoleList;
+end;
+
+function TRoleList.UniqueItem(s: string): boolean;
+var
+  i: Integer;
+begin
+  Result := False;
+  for i := 0 to Count-1 do
+    if Items[i].Rolename = s then
+      exit;
+  Result := True;
 end;
 
 { TUser }
@@ -207,12 +266,6 @@ destructor TUser.Destroy;
 begin
   FRoles.Free;
   inherited Destroy;
-end;
-
-procedure TUser.Select(index: integer);
-begin
-  OwnerList.SelectedUser := Self;
-  OwnerList.SelectedUserIndex:= index;
 end;
 
 { TAssignedRoleList }
@@ -244,9 +297,6 @@ begin
   q.Transaction := t;
   q.SQL.Add('insert into usr_userrole(id, user_id, role_id) values (:id,:user_id,:role_id)');
   try
-    //q.params.ParamByName('id').AsInteger:= UserList.SelectedRole.ID;
-    //q.params.ParamByName('user_id').Asinteger:= UserList.SelectedUser.ID;
-    //q.params.ParamByName('role_id').Asinteger:= UserList.SelectedRole.RoleID;
     q.params.ParamByName('id').AsInteger:= ar.ID;
     q.params.ParamByName('user_id').Asinteger:= UserID;
     q.params.ParamByName('role_id').Asinteger:= ar.RoleID;
@@ -274,7 +324,6 @@ begin
   q.Transaction := t;
   q.SQL.Add('delete from usr_userrole where id=:id');
   try
-    //q.params.ParamByName('id').AsInteger:= UserList.SelectedRole.ID;
     q.params.ParamByName('id').AsInteger:= u.roles.Items[index].ID;
     q.ExecSQL;
     t.Commit;
@@ -367,10 +416,7 @@ function TUserList.DBAdd(u: TUser): boolean;
 var
   q: TSQLQuery;
   t: TSQLTransaction;
-  //u: tuser;
 begin
-  //u := UserList.Items[index];
-
   t := TSQLTransaction.Create(nil);
   t.DataBase := gConnection;
   q := TSQLQuery.Create(nil);
@@ -391,15 +437,14 @@ begin
 end;
 
 function TUserList.DBDelete(index: integer): Boolean;
+const
+  SQL_DEL_ROLES = 'delete from usr_userrole where user_id=:user_id';
+  SQL_DEL_USERS = 'delete from usr_user where id=:id';
 var
   q: TSQLQuery;
   t: TSQLTransaction;
   user: TUser;
 begin
-  //UserList.Items[index].Select(index);
-  //if SelectedUser = nil then exit;
-
-  //user := tuser.create(userlist);
   user := userlist.Items[index];
 
   t := TSQLTransaction.Create(nil);
@@ -407,23 +452,22 @@ begin
   q := TSQLQuery.Create(nil);
   q.DataBase := gConnection;
   q.Transaction := t;
-  q.SQL.Add('delete from usr_user where id=:id');
+
   try
-    //q.params.ParamByName('id').AsInteger:= UserList.Items[index].ID;
-    q.params.ParamByName('id').AsInteger:= user.ID; // Items[index].ID;
+    //delete child data from usr_userrole
+    q.SQL.Add(SQL_DEL_ROLES);
+    q.params.ParamByName('user_id').AsInteger:= user.ID;
+    q.ExecSQL;
+
+    //delete user
+    q.SQL.Clear;
+    q.SQL.Add(SQL_DEL_USERS);
+    q.params.ParamByName('id').AsInteger:= user.ID;
     q.ExecSQL;
     t.Commit;
 
     //list update
-    Delete(index);
-    //if SelectedUserIndex >= Count then
-    //  SelectedUserIndex := SelectedUserIndex - 1;
-    //if SelectedUserIndex = -1 then
-    //  SelectedUser := nil
-    //else
-    //  SelectedUser := Items[SelectedUserIndex];
-    //SelectedRoleIndex:= -1;
-    //SelectedRole := nil;
+    Delete(index);      //todo:error after this line
 
     Result := True;
   finally
