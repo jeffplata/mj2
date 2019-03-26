@@ -36,7 +36,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="13">
+    <Units Count="14">
       <Unit0>
         <Filename Value="mj2.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -119,6 +119,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit12>
+      <Unit13>
+        <Filename Value="utils\usermanager_add_task.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAddTask"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Usermanager_Add_Task"/>
+      </Unit13>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

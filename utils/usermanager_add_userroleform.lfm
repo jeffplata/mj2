@@ -63,6 +63,7 @@ object frmUserRole: TfrmUserRole
     BorderSpacing.Bottom = 2
     BorderSpacing.Around = 2
     ItemHeight = 0
+    OnDblClick = ListBox1DblClick
     TabOrder = 1
   end
 end

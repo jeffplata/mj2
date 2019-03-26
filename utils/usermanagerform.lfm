@@ -28,14 +28,14 @@ object frmUserManager: TfrmUserManager
       Style = tbsCheck
     end
     object ToolButton2: TToolButton
-      Left = 36
+      Left = 37
       Top = 2
       Action = actTabRoles
       Grouped = True
       Style = tbsCheck
     end
     object ToolButton3: TToolButton
-      Left = 70
+      Left = 73
       Top = 2
       Action = actTabTasks
       Grouped = True
@@ -78,17 +78,17 @@ object frmUserManager: TfrmUserManager
     Height = 223
     Top = 26
     Width = 456
-    ActivePage = tabUsers
+    ActivePage = tabTasks
     Align = alClient
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 2
     object tabUsers: TTabSheet
       Caption = 'tabUsers'
-      ClientHeight = 197
+      ClientHeight = 195
       ClientWidth = 448
       object Panel1: TPanel
         Left = 4
-        Height = 193
+        Height = 191
         Top = 0
         Width = 245
         Align = alClient
@@ -96,14 +96,14 @@ object frmUserManager: TfrmUserManager
         BorderSpacing.Bottom = 4
         BevelOuter = bvNone
         Caption = 'Panel1'
-        ClientHeight = 193
+        ClientHeight = 191
         ClientWidth = 245
         TabOrder = 0
         object Label1: TLabel
           Left = 0
-          Height = 13
+          Height = 15
           Top = 8
-          Width = 32
+          Width = 31
           Caption = 'Users'
           Font.Style = [fsBold]
           ParentColor = False
@@ -111,19 +111,19 @@ object frmUserManager: TfrmUserManager
         end
         object Panel4: TPanel
           Left = 0
-          Height = 169
+          Height = 167
           Top = 24
           Width = 245
           Align = alBottom
           Anchors = [akTop, akLeft, akRight, akBottom]
           BevelOuter = bvNone
           Caption = 'Panel4'
-          ClientHeight = 169
+          ClientHeight = 167
           ClientWidth = 245
           TabOrder = 0
           object lvUsers: TListView
             Left = 0
-            Height = 169
+            Height = 152
             Top = 0
             Width = 220
             Align = alClient
@@ -131,6 +131,7 @@ object frmUserManager: TfrmUserManager
             Columns = <>
             HideSelection = False
             OwnerData = True
+            PopupMenu = PopupMenu1
             ReadOnly = True
             RowSelect = True
             TabOrder = 0
@@ -140,7 +141,7 @@ object frmUserManager: TfrmUserManager
           end
           object ToolBar2: TToolBar
             Left = 220
-            Height = 169
+            Height = 152
             Top = 0
             Width = 25
             Align = alRight
@@ -165,11 +166,21 @@ object frmUserManager: TfrmUserManager
               ShowHint = True
             end
           end
+          object Label5: TLabel
+            Left = 0
+            Height = 15
+            Top = 152
+            Width = 245
+            Align = alBottom
+            Caption = '* Inactive user'
+            ParentColor = False
+            ParentFont = False
+          end
         end
       end
       object Panel3: TPanel
         Left = 253
-        Height = 193
+        Height = 191
         Top = 0
         Width = 191
         Align = alRight
@@ -178,32 +189,32 @@ object frmUserManager: TfrmUserManager
         BorderSpacing.Bottom = 4
         BevelOuter = bvNone
         Caption = 'Panel3'
-        ClientHeight = 193
+        ClientHeight = 191
         ClientWidth = 191
         TabOrder = 1
         object Label2: TLabel
           Left = 0
-          Height = 13
+          Height = 15
           Top = 8
-          Width = 72
+          Width = 79
           Caption = 'Assigned Roles'
           ParentColor = False
         end
         object Panel5: TPanel
           Left = 0
-          Height = 169
+          Height = 167
           Top = 24
           Width = 191
           Align = alBottom
           Anchors = [akTop, akLeft, akBottom]
           BevelOuter = bvNone
           Caption = 'Panel5'
-          ClientHeight = 169
+          ClientHeight = 167
           ClientWidth = 191
           TabOrder = 0
           object lvRolesAssigned: TListView
             Left = 0
-            Height = 169
+            Height = 167
             Top = 0
             Width = 166
             Align = alClient
@@ -219,7 +230,7 @@ object frmUserManager: TfrmUserManager
           end
           object ToolBar3: TToolBar
             Left = 166
-            Height = 169
+            Height = 167
             Top = 0
             Width = 25
             Align = alRight
@@ -335,11 +346,11 @@ object frmUserManager: TfrmUserManager
     end
     object tabTasks: TTabSheet
       Caption = 'tabTasks'
-      ClientHeight = 197
+      ClientHeight = 195
       ClientWidth = 448
       object Panel8: TPanel
         Left = 4
-        Height = 193
+        Height = 191
         Top = 0
         Width = 444
         Align = alClient
@@ -347,14 +358,14 @@ object frmUserManager: TfrmUserManager
         BorderSpacing.Bottom = 4
         BevelOuter = bvNone
         Caption = 'Panel8'
-        ClientHeight = 193
+        ClientHeight = 191
         ClientWidth = 444
         TabOrder = 0
         object Label4: TLabel
           Left = 0
-          Height = 13
+          Height = 15
           Top = 8
-          Width = 33
+          Width = 30
           Caption = 'Tasks'
           Font.Style = [fsBold]
           ParentColor = False
@@ -362,7 +373,7 @@ object frmUserManager: TfrmUserManager
         end
         object Panel9: TPanel
           Left = 0
-          Height = 169
+          Height = 167
           Top = 24
           Width = 440
           Align = alBottom
@@ -370,12 +381,12 @@ object frmUserManager: TfrmUserManager
           BorderSpacing.Right = 4
           BevelOuter = bvNone
           Caption = 'Panel4'
-          ClientHeight = 169
+          ClientHeight = 167
           ClientWidth = 440
           TabOrder = 0
-          object lvUsers2: TListView
+          object lvTasks: TListView
             Left = 0
-            Height = 169
+            Height = 167
             Top = 0
             Width = 415
             Align = alClient
@@ -387,10 +398,11 @@ object frmUserManager: TfrmUserManager
             RowSelect = True
             TabOrder = 0
             ViewStyle = vsReport
+            OnData = lvTasksData
           end
           object ToolBar5: TToolBar
             Left = 415
-            Height = 169
+            Height = 167
             Top = 0
             Width = 25
             Align = alRight
@@ -403,14 +415,16 @@ object frmUserManager: TfrmUserManager
             object ToolButton10: TToolButton
               Left = 1
               Top = 0
-              Action = actUserAdd
+              Action = actTaskAdd
               ParentShowHint = False
               ShowHint = True
             end
             object ToolButton11: TToolButton
               Left = 1
+              Hint = 'Delete User'
               Top = 22
-              Action = actUserDelete
+              Caption = 'Delete User'
+              ImageIndex = 0
               ParentShowHint = False
               ShowHint = True
             end
@@ -422,17 +436,16 @@ object frmUserManager: TfrmUserManager
   object ActionList1: TActionList
     Images = ImageList1
     OnUpdate = ActionList1Update
-    left = 184
-    top = 32
+    left = 352
     object actUserAdd: TAction
-      Caption = 'U+'
+      Caption = 'Add User'
       GroupIndex = 1
       Hint = 'Add User'
       ImageIndex = 1
       OnExecute = actUserAddExecute
     end
     object actUserDelete: TAction
-      Caption = 'U-'
+      Caption = 'Delete User'
       GroupIndex = 1
       Hint = 'Delete User'
       ImageIndex = 0
@@ -474,12 +487,29 @@ object frmUserManager: TfrmUserManager
       ImageIndex = 0
       OnExecute = actRoleDeleteExecute
     end
+    object actUserActivate: TAction
+      Caption = 'Activate'
+      OnExecute = actUserActivateExecute
+    end
+    object actUserDeactivate: TAction
+      Caption = 'Deactivate'
+      OnExecute = actUserDeactivateExecute
+    end
+    object actTaskAdd: TAction
+      Caption = 'Add Task'
+      ImageIndex = 1
+      OnExecute = actTaskAddExecute
+    end
+    object actTaskDelete: TAction
+      Caption = 'Delete Task'
+      ImageIndex = 0
+      OnExecute = actTaskDeleteExecute
+    end
   end
   object ImageList1: TImageList
-    left = 136
-    top = 32
+    left = 312
     Bitmap = {
-      4C69020000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      4C69030000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
@@ -543,7 +573,57 @@ object frmUserManager: TfrmUserManager
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00FFFFFF00
+      FF00FFFFFF00FFFFFF00FFFFFF00C77947AACC8655CECC8857DECB8856DBCC88
+      56DBCB8757DBCA8350D0C479426EB2673C08FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00CA8554D0FFFFFFDBFDF3E9DEFDF3EADEFCF2
+      E8DEFAEFE3DEFAF2E7DEEABB88DECF85559CB4693D0AFFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00CB8656DAFEF5EDDEFCDEC5DEFBE0C7DEF9DC
+      C2DEF5D3B4DEFEF9F3DEFAE2C4DEECC193DEC37D4880FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00CB8655DBFEF6F0DEFCE2CDDEFCE3CDDEFADF
+      C8DEF7D9BCDEF5E9DDDEFAF3EBDEFBF8F3DECD9565DCFFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00CB8655DBFEF7F1DEFCE5D2DEFCE4D1DEFBE2
+      CCDEF9DDC4DEEAC39DFFE6BF96FFE4BB92FFE4BB92FFD1A06CF5D09E6DF6CC96
+      5FDAC479427EB2673C09FFFFFF00CB8654DBFFF7F2DEFEE7D5DEFEE7D5DEFDE5
+      D1DEFAE0CADEE5BE96FFFFFFFEFFFDF3E9FFFDF3EAFFFCF2E8FFFAEFE3FFFAF2
+      E7FFEABB88FFCF8555B3B4693D0CCB8553DBFFF7F0DEFFE7D5DEFDE7D6DEFDE6
+      D4DEFCE4D0DEE4BB93FFFEF5EDFFFCDEC5FFFBE0C7FFF9DCC2FFF5D3B4FFFEF9
+      F3FFFAE2C4FFECC193FFC37D4893CA8452DBFFF7F1DEFFE9D9DEFFEADBDEFFE9
+      D9DEFFE7D7DEE4BB92FFFEF6F0FFFCE2CDFFFCE3CDFFFADFC8FFF7D9BCFFF5E9
+      DDFFFAF3EBFFFBF8F3FFCA8353FECC8352DBFBF5EEDEFFE9D9DEFFEADBDEFFE9
+      D9DEFFE7D7DEE4BB92FFFEF7F1FFFCE5D2FFFCE4D1FFFBE2CCFFF9DDC4FFF6D7
+      BBFFF3D1AFFFFAEFE4FFCC8758FECF8253DEEFF1E7DEFFE9D9DEFFEADBDEFFE9
+      D9DEFFE7D7DEE4BB91FFFFF7F2FFFEE7D5FFFEE7D5FFFDE5D1FFFAE0CAFFF9DE
+      C4FFF7D9BCFFFDF2E7FFCC8757FEC87C4ED3FCF3ECDEFAF1E8DEFAF0E7DEFBF1
+      E9DEFBF2EADEE4BA91FFFFF7F0FFFFE7D5FFFDE7D6FFFDE6D4FFFCE4D0FFFBE3
+      CBFFFADCC2FFFEF3E8FFCC8656FEC7794AB9C8794BCEC87545DDC77545D4C875
+      45D4C77545D4CA8452FFFFF7F1FFFFE9D9FFFFEADBFFFFE9D9FFFFE7D7FFFFE5
+      D2FFFFE2CBFFFFF7F1FFCB8555FEFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00CC8352FBFBF5EEFFFFE9D9FFFFEADBFFFFE9D9FFFFE7D7FFFFE5
+      D2FFFFE2CBFFFBF6EFFFCC8355FEFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00CF8253FFEFF1E7FFFFE9D9FFFFEADBFFFFE9D9FFFFE7D7FFFFE5
+      D2FFFFE2CBFFEFF2E8FFCE8156FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00C77949EDFCF3ECFFFAF1E8FFFAF0E7FFFBF1E9FFFBF2EAFFFBF2
+      EAFFFBF2EBFFFDF4EEFFCA8054F9FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00C57342C1C67545E6C87545FEC77545F3C87545F3C77545F3C775
+      45F3C87546F4C57444E8CA7F53F1
     }
+  end
+  object PopupMenu1: TPopupMenu
+    left = 392
+    object MenuItem1: TMenuItem
+      Action = actUserAdd
+    end
+    object MenuItem2: TMenuItem
+      Action = actUserDelete
+    end
+    object MenuItem5: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem6: TMenuItem
+      Action = actUserActivate
+    end
+    object MenuItem7: TMenuItem
+      Action = actUserDeactivate
+    end
   end
 end

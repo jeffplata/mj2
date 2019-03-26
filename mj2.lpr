@@ -7,8 +7,9 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, MainForm, SetDBForm, mainDM, lazcontrols,
-  UserManagerForm, _TemplateForm, usermanager_bom, HiLoGeneratorU, usermanager_add_userroleform;
+  Forms, MainForm, SetDBForm, mainDM, lazcontrols, UserManagerForm,
+  _TemplateForm, usermanager_bom, HiLoGeneratorU, usermanager_add_userroleform,
+  Usermanager_Add_Task;
 
 {$R *.res}
 
@@ -17,9 +18,9 @@ begin
   RequireDerivedFormResource:=True;
   Application.Initialize;
   Application.CreateForm(TdmMain, dmMain);
+  Application.CreateForm(TfrmMain, frmMain);
   if dmMain.Loggedin then
   begin
-    Application.CreateForm(TfrmMain, frmMain);
     Application.Run;
   end;
 end.

@@ -19,6 +19,7 @@ type
     ListBox1: TListBox;
     Panel1: TPanel;
     procedure FormCreate(Sender: TObject);
+    procedure ListBox1DblClick(Sender: TObject);
   private
 
   public
@@ -43,6 +44,11 @@ begin
     ListBox1.Items.Add(RoleList.Items[i].Rolename);
   ListBox1.ItemIndex:= 0;
 
+end;
+
+procedure TfrmUserRole.ListBox1DblClick(Sender: TObject);
+begin
+  btnOk.Click;
 end;
 
 class function TfrmUserRole.SelectRole: Integer;

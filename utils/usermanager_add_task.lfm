@@ -1,0 +1,123 @@
+object frmAddTask: TfrmAddTask
+  Left = 414
+  Height = 260
+  Top = 257
+  Width = 414
+  BorderStyle = bsDialog
+  Caption = 'Add Tasks'
+  ClientHeight = 260
+  ClientWidth = 414
+  OnCreate = FormCreate
+  Position = poOwnerFormCenter
+  LCLVersion = '1.8.2.0'
+  object Panel1: TPanel
+    Left = 8
+    Height = 38
+    Top = 222
+    Width = 398
+    Align = alBottom
+    BorderSpacing.Left = 8
+    BorderSpacing.Right = 8
+    BevelOuter = bvNone
+    ClientHeight = 38
+    ClientWidth = 398
+    TabOrder = 0
+    object Bevel1: TBevel
+      Left = 0
+      Height = 50
+      Top = 0
+      Width = 398
+      Align = alTop
+      Shape = bsTopLine
+    end
+    object btnOk: TButton
+      Left = 243
+      Height = 25
+      Top = 8
+      Width = 75
+      Anchors = [akTop, akRight]
+      Caption = 'Ok'
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object btnCancel: TButton
+      Left = 323
+      Height = 25
+      Top = 8
+      Width = 75
+      Anchors = [akTop, akRight]
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+  object Panel2: TPanel
+    Left = 4
+    Height = 214
+    Top = 4
+    Width = 176
+    Align = alLeft
+    BorderSpacing.Around = 4
+    BevelOuter = bvNone
+    Caption = 'Panel2'
+    ClientHeight = 214
+    ClientWidth = 176
+    TabOrder = 1
+    object ListFilterEdit1: TListFilterEdit
+      Left = 0
+      Height = 23
+      Top = 0
+      Width = 176
+      ButtonWidth = 23
+      NumGlyphs = 1
+      Align = alTop
+      MaxLength = 0
+      TabOrder = 0
+      FilteredListbox = ListBox1
+    end
+    object ListBox1: TListBox
+      Left = 0
+      Height = 189
+      Top = 25
+      Width = 176
+      Align = alClient
+      BorderSpacing.Top = 2
+      ItemHeight = 0
+      TabOrder = 1
+    end
+  end
+  object Panel3: TPanel
+    Left = 184
+    Height = 214
+    Top = 4
+    Width = 226
+    Align = alClient
+    BorderSpacing.Around = 4
+    BevelOuter = bvNone
+    Caption = 'Panel3'
+    ClientHeight = 214
+    ClientWidth = 226
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 0
+      Height = 23
+      Top = 0
+      Width = 226
+      Align = alTop
+      AutoSize = False
+      Caption = ' Available Tasks'
+      Layout = tlCenter
+      ParentColor = False
+    end
+    object CheckListBox1: TCheckListBox
+      Left = 0
+      Height = 189
+      Top = 25
+      Width = 226
+      Align = alClient
+      BorderSpacing.Top = 2
+      ItemHeight = 0
+      TabOrder = 0
+    end
+  end
+end
