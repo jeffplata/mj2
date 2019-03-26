@@ -120,8 +120,6 @@ type
     property UserName: string read FUserName write FUserName;
     property IsActive: integer read FIsActive write FIsActive;
     property Roles: TAssignedRoleList read FRoles write FRoles;
-    //todo: tuser: include an active/inactive status
-    //when deleting make sure only inactive can be deleted
   end;
 
   { TAssignedRoleList }

@@ -123,6 +123,7 @@
         <Filename Value="utils\usermanager_add_task.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmAddTask"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Usermanager_Add_Task"/>
       </Unit13>

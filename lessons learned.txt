@@ -1,4 +1,7 @@
 
+7:42 PM 3/26/2019
+ListFilterEdit: to use, first populate the list before assigning the 
+ListFilterEdit.FilteredListBox; otherwise filtering won't work
 
 8:13 PM 3/25/2019
 Listview.ItemIndex is not automatically set after deleting the last item

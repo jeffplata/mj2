@@ -3,11 +3,13 @@ object frmAddTask: TfrmAddTask
   Height = 260
   Top = 257
   Width = 414
+  ActiveControl = ListFilterEdit1
   BorderStyle = bsDialog
   Caption = 'Add Tasks'
   ClientHeight = 260
   ClientWidth = 414
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   Position = poOwnerFormCenter
   LCLVersion = '1.8.2.0'
   object Panel1: TPanel
@@ -65,7 +67,7 @@ object frmAddTask: TfrmAddTask
     TabOrder = 1
     object ListFilterEdit1: TListFilterEdit
       Left = 0
-      Height = 23
+      Height = 21
       Top = 0
       Width = 176
       ButtonWidth = 23
@@ -73,16 +75,16 @@ object frmAddTask: TfrmAddTask
       Align = alTop
       MaxLength = 0
       TabOrder = 0
-      FilteredListbox = ListBox1
     end
     object ListBox1: TListBox
       Left = 0
-      Height = 189
-      Top = 25
+      Height = 191
+      Top = 23
       Width = 176
       Align = alClient
       BorderSpacing.Top = 2
       ItemHeight = 0
+      OnSelectionChange = ListBox1SelectionChange
       TabOrder = 1
     end
   end
@@ -111,11 +113,10 @@ object frmAddTask: TfrmAddTask
     end
     object CheckListBox1: TCheckListBox
       Left = 0
-      Height = 189
-      Top = 25
+      Height = 191
+      Top = 23
       Width = 226
       Align = alClient
-      BorderSpacing.Top = 2
       ItemHeight = 0
       TabOrder = 0
     end
