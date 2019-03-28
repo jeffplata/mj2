@@ -5,8 +5,10 @@ unit Usermanager_Add_Task;
 interface
 
 uses
-  Classes, SysUtils, contnrs, FileUtil, ListFilterEdit, TreeFilterEdit, Forms,
-  Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, Buttons, CheckLst;
+  Classes, SysUtils, contnrs, FileUtil, ListFilterEdit, Forms,
+  Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, Buttons, CheckLst
+  , UserManager_bom
+  ;
 
 type
 
@@ -18,10 +20,12 @@ type
   TMyTask = class(TObject)
   private
     FFormName: string;
+    FSelected: Boolean;
     FTaskName: string;
   public
     property FormName: string read FFormName write FFormName;
     property TaskName: string read FTaskName write FTaskName;
+    property Selected: Boolean read FSelected write FSelected;
   end;
 
   { TMyTaskList }
@@ -42,6 +46,7 @@ type
     Bevel1: TBevel;
     btnCancel: TButton;
     btnOk: TButton;
+    Button1: TButton;
     CheckListBox1: TCheckListBox;
     Label1: TLabel;
     ListBox1: TListBox;
@@ -49,18 +54,21 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure ListBox1SelectionChange(Sender: TObject; User: boolean);
   private
+    FFormIndex: integer;
     FMyTaskList: TMyTaskList;
+    procedure UpdateChecked(index:integer);
   public
 
   end;
 
 implementation
 
-uses UserManager_bom, ActnList;
+uses ActnList;
 
 {$R *.lfm}
 
@@ -100,12 +108,35 @@ begin
     for j := 0 to screen.Forms[i].ComponentCount-1 do
       if screen.forms[i].Components[j] is TAction then
       begin
-        //FTaskList.Add(screen.forms[i].Components[j].Name);
         t := TMyTask.Create;
         t.FormName:= screen.forms[i].name ;
         t.TaskName:= screen.forms[i].Components[j].Name;
         FMyTaskList.Add(t);
       end;
+  end;
+
+  FFormIndex:= -1;
+end;
+
+
+procedure TfrmAddTask.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+var
+  i: Integer;
+  t: TTask;
+begin
+  if ModalResult = mrOk then
+  begin
+    UpdateChecked(FFormIndex);
+    for i := 0 to FMyTaskList.Count-1 do
+      if FMyTaskList.Items[i].Selected then
+      begin
+        t := TTask.Create(TaskList);
+        t.id := 0;
+        t.FormName:= FMyTaskList.Items[i].FormName;
+        t.TaskName:= FMyTaskList.Items[i].TaskName;
+        TaskList.Add(t);
+      end;
+    //todo: transfer this to usermanagerform
   end;
 end;
 
@@ -114,14 +145,37 @@ begin
   FMyTaskList.Free;
 end;
 
+
 procedure TfrmAddTask.ListBox1SelectionChange(Sender: TObject; User: boolean);
 var
   i: Integer;
 begin
+  UpdateChecked(FFormIndex);
   CheckListBox1.Clear;
   for i := 0  to FMyTaskList.count-1 do
     if FMyTaskList.Items[i].FormName = ListBox1.items[ListBox1.ItemIndex] then
+    begin
       CheckListBox1.Items.Add(FMyTaskList.Items[i].TaskName);
+      CheckListBox1.Checked[CheckListBox1.Count-1] := FMyTaskList.Items[i].Selected;
+    end;
+  FFormIndex:= ListBox1.ItemIndex;
+end;
+
+procedure TfrmAddTask.UpdateChecked(index: integer);
+var
+  i, j: Integer;
+  currentFormName: String;
+begin
+  if index = -1 then exit;
+  //currentFormName := ListBox1.items[ListBox1.ItemIndex];
+  currentFormName:= ListBox1.Items[index];
+  for i := 0 to CheckListBox1.Count-1 do
+    for j := 0 to FMyTaskList.Count -1 do
+      begin
+        if (FMyTaskList.Items[j].FormName=currentFormName) and
+           (FMyTaskList.Items[j].TaskName=CheckListBox1.Items[i]) then
+        FMyTaskList.Items[j].Selected:= CheckListBox1.Checked[i];
+      end;
 end;
 
 

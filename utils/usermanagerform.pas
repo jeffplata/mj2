@@ -214,7 +214,10 @@ var
 begin
   frm := TfrmAddTask.Create(Self);
   try
-    frm.showmodal;
+    if frm.showmodal = mrOk then begin
+      lvTasks.items.Count:= TaskList.Count;
+      ListViewUpdate(lvTasks,TaskList.Count,0);
+    end;
   finally
     frm.free;
   end;
