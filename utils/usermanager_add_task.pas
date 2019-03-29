@@ -136,7 +136,6 @@ begin
         t.TaskName:= FMyTaskList.Items[i].TaskName;
         TaskList.Add(t);
       end;
-    //todo: transfer this to usermanagerform
   end;
 end;
 

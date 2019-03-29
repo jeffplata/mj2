@@ -5,14 +5,15 @@ unit UserManagerForm;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ExtCtrls, StdCtrls, Menus, ActnList;
+  Classes, SysUtils, FileUtil, ListViewFilterEdit, Forms, Controls, Graphics,
+  Dialogs, ComCtrls, ExtCtrls, StdCtrls, Menus, ActnList, FileCtrl, EditBtn;
 
 type
 
   { TfrmUserManager }
 
   TfrmUserManager = class(TForm)
+    actTaskRefresh: TAction;
     actTaskAdd: TAction;
     actTaskDelete: TAction;
     actUserActivate: TAction;
@@ -35,6 +36,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    ListViewFilterEdit1: TListViewFilterEdit;
     lvRolesAssigned: TListView;
     lvUsers: TListView;
     lvRoles: TListView;
@@ -65,7 +67,6 @@ type
     ToolBar5: TToolBar;
     ToolButton1: TToolButton;
     ToolButton10: TToolButton;
-    ToolButton11: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
@@ -82,6 +83,7 @@ type
     procedure actTabUsersExecute(Sender: TObject);
     procedure actTaskAddExecute(Sender: TObject);
     procedure actTaskDeleteExecute(Sender: TObject);
+    procedure actTaskRefreshExecute(Sender: TObject);
     procedure actUserActivateExecute(Sender: TObject);
     procedure actUserDeactivateExecute(Sender: TObject);
     procedure actUserRoleAddExecute(Sender: TObject);
@@ -91,6 +93,9 @@ type
     procedure Button4Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure ListViewFilterEdit1AfterFilter(Sender: TObject);
+    function ListViewFilterEdit1FilterItem(ItemData: Pointer; out Done: Boolean
+      ): Boolean;
     procedure lvRolesAssignedData(Sender: TObject; Item: TListItem);
     procedure lvRolesData(Sender: TObject; Item: TListItem);
     procedure lvTasksData(Sender: TObject; Item: TListItem);
@@ -228,6 +233,11 @@ begin
   //delete task
 end;
 
+procedure TfrmUserManager.actTaskRefreshExecute(Sender: TObject);
+begin
+  //task refresh
+end;
+
 procedure TfrmUserManager.actUserActivateExecute(Sender: TObject);
 begin
   if UserList.DBSetActive(lvUsers.ItemIndex,1) then
@@ -311,6 +321,7 @@ begin
   LoadUserList;
   LoadRoles;
   LoadTasks;
+  ListViewFilterEdit1.FilteredListview := lvTasks;
 
   PageControl1.ActivePage := tabUsers;
   PageControl1.ShowTabs:= False;
@@ -319,6 +330,17 @@ end;
 procedure TfrmUserManager.FormShow(Sender: TObject);
 begin
   ListViewUpdate(lvUsers, UserList.Count, 0);
+end;
+
+procedure TfrmUserManager.ListViewFilterEdit1AfterFilter(Sender: TObject);
+begin
+
+end;
+
+function TfrmUserManager.ListViewFilterEdit1FilterItem(ItemData: Pointer; out
+  Done: Boolean): Boolean;
+begin
+
 end;
 
 procedure TfrmUserManager.lvRolesAssignedData(Sender: TObject; Item: TListItem);
@@ -348,8 +370,9 @@ var
   ob: TTask;
 begin
   ob := TaskList.Items[Item.Index];
-  Item.Caption := inttostr(ob.ID);
-  Item.SubItems.Add(ob.TaskName);
+  //Item.Caption := inttostr(ob.ID);
+  Item.Caption := ob.TaskName;
+  //Item.SubItems.Add(ob.TaskName);
   Item.SubItems.Add(ob.FormName);
 end;
 
@@ -426,9 +449,9 @@ var
   c: TListColumn;
 begin
   //Task columns
-  c := lvTasks.Columns.Add;
-  c.Caption:= 'ID';
-  C.Width:= 50;
+  //c := lvTasks.Columns.Add;
+  //c.Caption:= 'ID';
+  //C.Width:= 50;
 
   c := lvTasks.Columns.Add;
   c.caption := 'Task Name';
