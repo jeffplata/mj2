@@ -384,6 +384,22 @@ object frmUserManager: TfrmUserManager
           ClientHeight = 167
           ClientWidth = 440
           TabOrder = 0
+          object lvTasks: TListView
+            Left = 0
+            Height = 143
+            Top = 24
+            Width = 440
+            Align = alClient
+            AutoWidthLastColumn = True
+            Columns = <>
+            HideSelection = False
+            OwnerData = True
+            ReadOnly = True
+            RowSelect = True
+            TabOrder = 0
+            ViewStyle = vsReport
+            OnData = lvTasksData
+          end
           object ToolBar5: TToolBar
             Left = 0
             Height = 24
@@ -393,71 +409,27 @@ object frmUserManager: TfrmUserManager
             EdgeInner = esNone
             EdgeOuter = esNone
             Images = ImageList1
-            TabOrder = 0
+            TabOrder = 1
             Transparent = True
             object ToolButton10: TToolButton
-              Left = 165
+              Left = 1
               Top = 0
               Action = actTaskRefresh
               ParentShowHint = False
               ShowHint = True
             end
-            object edtTaskFilter: TEdit
-              Left = 1
+            object ListViewFilterEdit1: TListViewFilterEdit
+              Left = 24
               Height = 23
               Top = 0
-              Width = 136
-              OnChange = edtTaskFilterChange
-              OnKeyDown = edtTaskFilterKeyDown
+              Width = 152
+              OnAfterFilter = ListViewFilterEdit1AfterFilter
+              OnFilterItem = ListViewFilterEdit1FilterItem
+              ButtonWidth = 23
+              NumGlyphs = 1
+              MaxLength = 0
               TabOrder = 0
             end
-            object spbTaskClear: TSpeedButton
-              Left = 137
-              Height = 22
-              Top = 0
-              Width = 23
-              Action = actTaskFilterClear
-              ShowCaption = False
-              ShowHint = True
-              ParentShowHint = False
-            end
-            object ToolButton11: TToolButton
-              Left = 160
-              Height = 22
-              Top = 0
-              Caption = 'ToolButton11'
-              Style = tbsDivider
-            end
-          end
-          object vstTasks: TVirtualStringTree
-            Left = 0
-            Height = 141
-            Top = 26
-            Width = 440
-            Align = alClient
-            BorderSpacing.Top = 2
-            DefaultText = 'Node'
-            Header.AutoSizeIndex = 0
-            Header.Columns = <            
-              item
-                Position = 0
-                Text = 'ID'
-              end            
-              item
-                Position = 1
-                Text = 'Task'
-                Width = 150
-              end            
-              item
-                Position = 2
-                Text = 'Form Name'
-                Width = 150
-              end>
-            Header.Options = [hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
-            TabOrder = 1
-            TreeOptions.PaintOptions = [toShowButtons, toShowDropmark, toShowRoot, toThemeAware, toUseBlendedImages]
-            TreeOptions.SelectionOptions = [toFullRowSelect]
-            OnGetText = vstTasksGetText
           end
         end
       end
@@ -537,24 +509,14 @@ object frmUserManager: TfrmUserManager
     end
     object actTaskRefresh: TAction
       Caption = 'Refresh Tasks'
-      Hint = 'Refresh Tasks'
       ImageIndex = 3
       OnExecute = actTaskRefreshExecute
-    end
-    object actTaskFilterClear: TAction
-      Caption = 'Clear Task Filter'
-      Hint = 'Clear Filter'
-      OnExecute = actTaskFilterClearExecute
-    end
-    object actTaskfilter: TAction
-      Caption = 'Filter Tasks'
-      OnExecute = actTaskfilterExecute
     end
   end
   object ImageList1: TImageList
     left = 312
     Bitmap = {
-      4C69050000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      4C69040000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
@@ -682,39 +644,7 @@ object frmUserManager: TfrmUserManager
       3454A66737EEB58055F3CEA684FFD8B697FFDBB999FFD3AC8AFFC2946DFCA668
       38F6A466355BFFFFFF00FFFFFF00FFFFFF00A46534A2A4653401FFFFFF00FFFF
       FF00A4653405A4653453A76A3ABEA66938E9A46635FAA76A3AE4A76B3BAAA465
-      3424FFFFFF00FFFFFF00FFFFFF00000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      00000000000000000000000000002C8EC8FF2C8EC8FF2C8EC8FF2C8EC8FF2C8E
-      C8FF2C8EC8FF2C8EC8FF2C8EC8FF2C8EC8FF2C8EC8FF2C8EC8FF2C8EC8FF0000
-      00000000000000000000000000002B90C9F808C0F5FF3DD8FFFF7BE4FFFFB8F0
-      FFFFC5F3FFFFA6EDFFFF87E7FFFF68E1FFFF4ADBFFFF2BC7F5FF2B90C9F80000
-      00000000000000000000000000002B90C8532893CDF530D0FBFF6FE2FFFFACEE
-      FFFFCBF4FFFFACEEFFFF8DE8FFFF6FE2FFFF4DD6FBFF2D95CEF42B8FC9590000
-      0000000000000000000000000000000000002B91CA902A9ED4F461DDFEFFA0EC
-      FFFFD1F5FFFFB2EFFFFF93E9FFFF74E2FFFF36A2D6F42C91CA90000000000000
-      0000000000000000000000000000000000000080FF022A91CBC13FB1E0F893E9
-      FFFFD1F5FFFFB8F0FFFF9AEAFFFF4FB3E0F92E93CBC655AAAA03000000000000
-      000000000000000000000000000000000000000000002D87C3112D92CBE767C8
-      ECFEC5F3FFFFBEF2FFFF7ACEEDFE2F92CAE9268CCC1400000000000000000000
-      00000000000000000000000000000000000000000000000000002B8DC92F2C8E
-      C8FF2C8EC8FF2C8EC8FF2C8EC8FF2B8DC92F0000FF710000FF8E000000000000
-      0000000000000000FF860000FF79000000000000000000000000000000002C8E
-      C8FFC0F2FFFFA0ECFFFF2C8EC8FF000000000000FF8C0000FFFF0000FF8C0000
-      FF010000FF8C0000FFFF0000FF8C000000000000000000000000000000002C8E
-      C8FFC0F2FFFFA0ECFFFF2C8EC8FF00000000000000000000FF8C0000FFFF0000
-      FFCC0000FFFF0000FF8C00000000000000000000000000000000000000002C8E
-      C8FFC0F2FFFFA0ECFFFF2C8EC8FF00000000000000000000FF010000FFCB0000
-      FFFF0000FFCB0000FF0100000000000000000000000000000000000000002C8E
-      C8FFC0F2FFFFA0ECFFFF2C8EC8FF00000000000000000000FF8C0000FFFF0000
-      FFCC0000FFFF0000FF8C00000000000000000000000000000000000000002C8E
-      C8FF2C8EC8FF2C8EC8FF2C8EC8FF000000000000FF8C0000FFFF0000FF8C0000
-      FF010000FF8C0000FFFF0000FF8C000000000000000000000000000000000000
-      0000000000000000000000000000000000000000FF730000FF8C000000000000
-      0000000000000000FF8C0000FF73000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000
+      3424FFFFFF00FFFFFF00FFFFFF00
     }
   end
   object PopupMenu1: TPopupMenu
