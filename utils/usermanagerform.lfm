@@ -28,14 +28,14 @@ object frmUserManager: TfrmUserManager
       Style = tbsCheck
     end
     object ToolButton2: TToolButton
-      Left = 37
+      Left = 36
       Top = 2
       Action = actTabRoles
       Grouped = True
       Style = tbsCheck
     end
     object ToolButton3: TToolButton
-      Left = 73
+      Left = 70
       Top = 2
       Action = actTabTasks
       Grouped = True
@@ -346,11 +346,11 @@ object frmUserManager: TfrmUserManager
     end
     object tabTasks: TTabSheet
       Caption = 'tabTasks'
-      ClientHeight = 195
+      ClientHeight = 197
       ClientWidth = 448
       object Panel8: TPanel
         Left = 4
-        Height = 191
+        Height = 193
         Top = 0
         Width = 444
         Align = alClient
@@ -358,14 +358,14 @@ object frmUserManager: TfrmUserManager
         BorderSpacing.Bottom = 4
         BevelOuter = bvNone
         Caption = 'Panel8'
-        ClientHeight = 191
+        ClientHeight = 193
         ClientWidth = 444
         TabOrder = 0
         object Label4: TLabel
           Left = 0
-          Height = 15
+          Height = 13
           Top = 8
-          Width = 30
+          Width = 33
           Caption = 'Tasks'
           Font.Style = [fsBold]
           ParentColor = False
@@ -373,7 +373,7 @@ object frmUserManager: TfrmUserManager
         end
         object Panel9: TPanel
           Left = 0
-          Height = 167
+          Height = 169
           Top = 24
           Width = 440
           Align = alBottom
@@ -381,7 +381,7 @@ object frmUserManager: TfrmUserManager
           BorderSpacing.Right = 4
           BevelOuter = bvNone
           Caption = 'Panel4'
-          ClientHeight = 167
+          ClientHeight = 169
           ClientWidth = 440
           TabOrder = 0
           object ToolBar5: TToolBar
@@ -396,7 +396,7 @@ object frmUserManager: TfrmUserManager
             TabOrder = 0
             Transparent = True
             object ToolButton10: TToolButton
-              Left = 165
+              Left = 168
               Top = 0
               Action = actTaskRefresh
               ParentShowHint = False
@@ -404,7 +404,7 @@ object frmUserManager: TfrmUserManager
             end
             object edtTaskFilter: TEdit
               Left = 1
-              Height = 23
+              Height = 21
               Top = 0
               Width = 136
               OnChange = edtTaskFilterChange
@@ -426,12 +426,12 @@ object frmUserManager: TfrmUserManager
               Height = 22
               Top = 0
               Caption = 'ToolButton11'
-              Style = tbsDivider
+              Style = tbsSeparator
             end
           end
           object vstTasks: TVirtualStringTree
             Left = 0
-            Height = 141
+            Height = 143
             Top = 26
             Width = 440
             Align = alClient

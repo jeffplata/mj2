@@ -267,6 +267,7 @@ end;
 procedure TfrmUserManager.actTabTasksExecute(Sender: TObject);
 begin
   PageControl1.ActivePage := tabTasks;
+  edtTaskFilter.SetFocus;
 end;
 
 procedure TfrmUserManager.actTabUsersExecute(Sender: TObject);
@@ -327,6 +328,9 @@ var
 begin
   //task refresh
   actTaskFilterClear.Execute;
+
+  TaskList.Clear;
+  TaskList.ReadList;
 
   L := TTaskList.Create;
   try
