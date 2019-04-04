@@ -9,7 +9,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, MainForm, SetDBForm, mainDM, lazcontrols, UserManagerForm,
   _TemplateForm, usermanager_bom, HiLoGeneratorU, usermanager_add_userroleform,
-  Usermanager_Add_Task;
+  UserManager_Add_Tasks, ResourcesDM, UserManager_Add_Tasks_BOM;
 
 {$R *.res}
 

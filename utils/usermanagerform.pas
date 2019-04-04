@@ -11,12 +11,15 @@ uses
 
 type
 
-  PTreeData = ^TTreeData;
-  TTreeData = record
+  PTaskTreeData = ^TTaskTreeData;
+  TTaskTreeData = record
     FID: integer;
+    FRoleID: integer;
+    FRoleName: string;
     FTaskName: string;
     FFormName: string;
   end;
+
 
   { TfrmUserManager }
 
@@ -47,6 +50,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    Label6: TLabel;
     lvRolesAssigned: TListView;
     lvUsers: TListView;
     lvRoles: TListView;
@@ -57,6 +61,8 @@ type
     MenuItem7: TMenuItem;
     PageControl1: TPageControl;
     Panel1: TPanel;
+    Panel10: TPanel;
+    Panel11: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -75,9 +81,12 @@ type
     ToolBar3: TToolBar;
     ToolBar4: TToolBar;
     ToolBar5: TToolBar;
+    ToolBar6: TToolBar;
     ToolButton1: TToolButton;
     ToolButton10: TToolButton;
     ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    ToolButton13: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
@@ -86,6 +95,7 @@ type
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
     ToolButton9: TToolButton;
+    vstAssignedTasks: TVirtualStringTree;
     vstTasks: TVirtualStringTree;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure actRoleAddExecute(Sender: TObject);
@@ -94,6 +104,7 @@ type
     procedure actTabTasksExecute(Sender: TObject);
     procedure actTabUsersExecute(Sender: TObject);
     procedure actTaskAddExecute(Sender: TObject);
+    //procedure actTaskAddExecute(Sender: TObject);
     procedure actTaskDeleteExecute(Sender: TObject);
     procedure actTaskFilterClearExecute(Sender: TObject);
     procedure actTaskfilterExecute(Sender: TObject);
@@ -112,9 +123,17 @@ type
     procedure FormShow(Sender: TObject);
     procedure lvRolesAssignedData(Sender: TObject; Item: TListItem);
     procedure lvRolesData(Sender: TObject; Item: TListItem);
+    procedure lvRolesSelectItem(Sender: TObject; Item: TListItem;
+      Selected: Boolean);
     procedure lvUsersData(Sender: TObject; Item: TListItem);
     procedure lvUsersSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
+    procedure vstAssignedTasksFreeNode(Sender: TBaseVirtualTree;
+      Node: PVirtualNode);
+    procedure vstAssignedTasksGetText(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+      var CellText: String);
+    procedure vstTasksFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vstTasksGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
   private
@@ -123,6 +142,8 @@ type
     procedure LoadTasks;
     procedure ListViewUpdate( lv: TListView; ItemCount: integer; SelectedIndex: integer );
     procedure TaskFilterReset;
+    procedure PopulateVSTTask;
+    procedure FilterVSTAssignedTask( role: string );
   public
 
   end;
@@ -132,22 +153,23 @@ type
 
 implementation
 
-uses usermanager_bom, HiLoGeneratorU, usermanager_add_userroleform,
-  Usermanager_Add_Task, LCLType;
+uses usermanager_bom, HiLoGeneratorU, usermanager_add_userroleform, ResourcesDM,
+  UserManager_Add_Tasks, LCLType;
 
 {$R *.lfm}
 
-function AddVSTStructure(AVST: TCustomVirtualStringTree; ANode:
+function AddVSTTaskStructure(AVST: TCustomVirtualStringTree; ANode:
   PVirtualNode;
-  ARecord: TTreeData): PVirtualNode;
+  ARecord: TTaskTreeData): PVirtualNode;
 var
-  Data: PTreeData;
+  Data: PTaskTreeData;
 begin
   Result:=AVST.AddChild(ANode);
   Data:=AVST.GetNodeData(Result);
   Avst.ValidateNode(Result, False);
-  //Data^.FCaption:=ARecord.FCaption;
   Data^.FID:=ARecord.FID;
+  Data^.FRoleID:=ARecord.FRoleID;
+  Data^.FRoleName:=ARecord.FRoleName;
   Data^.FTaskName:=ARecord.FTaskName;
   Data^.FFormName:=ARecord.FFormName;
 end;
@@ -276,19 +298,24 @@ begin
 end;
 
 procedure TfrmUserManager.actTaskAddExecute(Sender: TObject);
-var
-  frm: TfrmAddTask;
 begin
-  frm := TfrmAddTask.Create(Self);
-  try
-    if frm.showmodal = mrOk then begin
-      //lvTasks.items.Count:= TaskList.Count;
-      //ListViewUpdate(lvTasks,TaskList.Count,0);
-    end;
-  finally
-    frm.free;
-  end;
+  TfrmAddTasksToRoles.Execute;
 end;
+
+//procedure TfrmUserManager.actTaskAddExecute(Sender: TObject);
+//var
+//  frm: TfrmAddTask;
+//begin
+//  frm := TfrmAddTask.Create(Self);
+//  try
+//    if frm.showmodal = mrOk then begin
+//      //lvTasks.items.Count:= TaskList.Count;
+//      //ListViewUpdate(lvTasks,TaskList.Count,0);
+//    end;
+//  finally
+//    frm.free;
+//  end;
+//end;
 
 procedure TfrmUserManager.actTaskDeleteExecute(Sender: TObject);
 begin
@@ -304,7 +331,7 @@ end;
 procedure TfrmUserManager.actTaskfilterExecute(Sender: TObject);
 var
   Node: PVirtualNode;
-  Data: PTreeData;
+  Data: PTaskTreeData;
   Str: String;
 begin
   // filter tasks
@@ -471,7 +498,8 @@ begin
   LoadRoles;
   LoadTasks;
 
-  ImageList1.GetBitmap(4,spbTaskClear.Glyph);
+  //ImageList1.GetBitmap(4,spbTaskClear.Glyph);
+  dmResources.ImageList1.GetBitmap(4,spbTaskClear.Glyph);
   PageControl1.ActivePage := tabUsers;
   PageControl1.ShowTabs:= False;
 end;
@@ -479,6 +507,7 @@ end;
 procedure TfrmUserManager.FormShow(Sender: TObject);
 begin
   ListViewUpdate(lvUsers, UserList.Count, 0);
+  ListViewUpdate(lvRoles, RoleList.Count, 0);
 end;
 
 
@@ -503,6 +532,12 @@ begin
   //Item.Caption := inttostr(ob.ID);
   //Item.SubItems.Add(ob.Rolename);
   Item.Caption := ob.Rolename;
+end;
+
+procedure TfrmUserManager.lvRolesSelectItem(Sender: TObject; Item: TListItem;
+  Selected: Boolean);
+begin
+  FilterVSTAssignedTask(Item.Caption);
 end;
 
 procedure TfrmUserManager.lvUsersData(Sender: TObject; Item: TListItem);
@@ -532,11 +567,54 @@ begin
   ListViewUpdate(lvRolesAssigned,u.roles.Count,0);
 end;
 
+procedure TfrmUserManager.vstAssignedTasksFreeNode(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+var
+  Data: PTaskTreeData;
+begin
+  Data:=vstAssignedTasks.GetNodeData(Node);
+  if Assigned(Data) then
+  begin
+    Data^.FID:= 0;
+    Data^.FRoleID:=0;
+    Data^.FRoleName:= '';
+    Data^.FFormName:= '';
+    Data^.FTaskName:= '';
+  end;
+end;
+
+procedure TfrmUserManager.vstAssignedTasksGetText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: String);
+var
+  Data: PTaskTreeData;
+begin
+  Data:=vstAssignedTasks.GetNodeData(Node);
+  case Column of
+    0: CellText:= IntToStr(Data^.FID);
+    1: CellText:= Data^.FTaskName;
+    2: CellText:= Data^.FFormName;
+  end;
+end;
+procedure TfrmUserManager.vstTasksFreeNode(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+var
+  Data: PTaskTreeData;
+begin
+  Data:=vstTasks.GetNodeData(Node);
+  if Assigned(Data) then
+  begin
+    Data^.FID:= 0;
+    Data^.FFormName:= '';
+    Data^.FTaskName:= '';
+  end;
+end;
+
 procedure TfrmUserManager.vstTasksGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
 var
-  Data: PTreeData;
+  Data: PTaskTreeData;
 begin
   Data:=vstTasks.GetNodeData(Node);
   case Column of
@@ -608,23 +686,27 @@ procedure TfrmUserManager.LoadTasks;
   //lvTasks.Items.Count:= TaskList.Count;
 var
   I: Integer;
-  TreeData: TTreeData;
+  TreeData: TTaskTreeData;
+  Node: PVirtualNode;
 begin
   if TaskList.Count = 0 then
     TaskList.ReadList;
 
-  vstTasks.Clear;
-  vstTasks.NodeDataSize:= SizeOf(TTreeData);
+  vstAssignedTasks.Clear;
+  vstAssignedTasks.NodeDataSize:= SizeOf(TTaskTreeData);
 
-  vstTasks.BeginUpdate;
+  vstAssignedTasks.BeginUpdate;
   for i := 0 to TaskList.Count-1 do
   begin
     Treedata.FID:= TaskList.Items[i].ID;
+    Treedata.FRoleID:= TaskList.Items[i].RoleID;
+    Treedata.FRoleName:= TaskList.Items[i].RoleName;
     TreeData.FTaskName:= TaskList.Items[i].TaskName;
     TreeData.FFormName:= TaskList.Items[i].FormName;
-    AddVSTStructure(vstTasks, nil, TreeData);
+    Node := AddVSTTaskStructure(vstAssignedTasks, nil, TreeData);
+    vstAssignedTasks.IsVisible[Node] := False;
   end;
-  vstTasks.EndUpdate;
+  vstAssignedTasks.EndUpdate;
 end;
 
 procedure TfrmUserManager.ListViewUpdate(lv: TListView;
@@ -656,6 +738,25 @@ begin
   end;
 end;
 
+procedure TfrmUserManager.PopulateVSTTask;
+
+begin
+
+end;
+
+procedure TfrmUserManager.FilterVSTAssignedTask(role: string);
+var
+  Node: PVirtualNode;
+  Data: PTaskTreeData;
+begin
+  Node := vstAssignedTasks.GetFirst;
+  while Assigned(Node) do
+  begin
+    Data := vstAssignedTasks.GetNodeData(Node);
+    vstAssignedTasks.IsVisible[Node] := (role=Data^.FRoleName);
+    Node := vstAssignedTasks.GetNext(Node);
+  end;
+end;
 
 end.
 

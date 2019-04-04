@@ -29,12 +29,16 @@ type
     FFormName: string;
     FID: integer;
     FOwnerList: TTaskList;
+    FRoleID: integer;
+    FRoleName: string;
     FTaskName: string;
   public
     constructor Create(AOwnerList:TTaskList);
     property OwnerList: TTaskList read FOwnerList write FOwnerList;
   published
     property ID: integer read FID write FID;
+    property RoleID: integer read FRoleID write FRoleID;
+    property RoleName: string read FRoleName write FRoleName;
     property TaskName: string read FTaskName write FTaskName;
     property FormName: string read FFormName write FFormName;
   end;
@@ -195,7 +199,12 @@ begin
   q := TSQLQuery.Create(nil);
   q.DataBase := gConnection;
   q.Transaction := t;
-  q.SQL.Add('select id, action, form_name from usr_task order by form_name, action');
+  //q.SQL.Add('select id, action, form_name from usr_task order by form_name, action');
+  //q.SQL.Add('select id, role_id, task_name, form_name from usr_roletask order by form_name, task_name ');
+
+  q.SQL.Add('SELECT rt.ID, rt.ROLE_ID, r.ROLENAME, rt.TASK_NAME, rt.FORM_NAME ');
+  q.SQL.Add('FROM USR_ROLETASK rt ');
+  q.SQL.Add('join USR_ROLE r on r.ID=rt.ROLE_ID ');
 
   try
     q.Open;
@@ -203,8 +212,10 @@ begin
     begin
       o := TTask.Create(TaskList);
       o.id        := q.fields[0].asinteger;
-      o.TaskName  := q.fields[1].asstring;
-      o.FormName  := q.fields[2].asstring;
+      o.RoleID    := q.fields[1].AsInteger;
+      o.RoleName  := q.fields[2].AsString;
+      o.TaskName  := q.fields[3].asstring;
+      o.FormName  := q.fields[4].asstring;
 
       TaskList.Add(o);
       q.next;

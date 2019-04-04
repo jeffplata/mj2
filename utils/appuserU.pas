@@ -76,6 +76,15 @@ implementation
 
 uses LoginForm, gConnectionu, CryptU, strutils, IniFiles, ActnList, sqldb;
 
+//new format
+//select task_name, form_name, list(rolename) roles
+//from (
+//   select task_name, form_name, r.ROLENAME
+//   from USR_ROLETASK rt
+//   join USR_ROLE r on r.ID=rt.ROLE_ID
+//   )
+//group by 1, 2
+
 function GetTasks: TTaskList;
 var
   Query : TSQLQuery;
