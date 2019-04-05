@@ -7,6 +7,13 @@ interface
 uses
   Classes, SysUtils, UserManager_bom, Forms;
 
+type
+  PTaskTreeData = ^TTaskTreeData;
+  TTaskTreeData = record
+    FTaskName: string;
+    FFormName: string;
+  end;
+
 var
   MyTaskList: TTaskList;
 

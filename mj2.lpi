@@ -39,7 +39,7 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="16">
+    <Units Count="15">
       <Unit0>
         <Filename Value="mj2.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -126,6 +126,7 @@
         <Filename Value="utils\usermanager_add_tasks.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmAddTasksToRoles"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UserManager_Add_Tasks"/>
       </Unit13>
@@ -133,14 +134,10 @@
         <Filename Value="utils\resourcesdm.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dmResources"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
         <UnitName Value="ResourcesDM"/>
       </Unit14>
-      <Unit15>
-        <Filename Value="utils\usermanager_add_tasks_bom.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="UserManager_Add_Tasks_BOM"/>
-      </Unit15>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -53,31 +53,23 @@ object frmAddTasksToRoles: TfrmAddTasksToRoles
     end
     object vstTasks: TVirtualStringTree
       Left = 0
-      Height = 269
-      Top = 30
+      Height = 271
+      Top = 28
       Width = 374
       Align = alClient
-      BorderSpacing.Top = 2
       DefaultText = 'Node'
-      Header.AutoSizeIndex = -1
+      Header.AutoSizeIndex = 0
       Header.Columns = <      
         item
           Position = 0
-          Text = 'Task'
-          Width = 120
         end      
         item
           Position = 1
-          Text = 'Form Name'
-          Width = 120
         end>
-      Header.MainColumn = 1
       Header.Options = [hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
       TabOrder = 1
-      TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
       TreeOptions.PaintOptions = [toShowButtons, toShowDropmark, toShowRoot, toThemeAware, toUseBlendedImages]
-      TreeOptions.SelectionOptions = [toFullRowSelect]
-      OnInitNode = vstTasksInitNode
+      OnGetText = vstTasksGetText
     end
   end
   object ActionList1: TActionList

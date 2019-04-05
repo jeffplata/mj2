@@ -524,7 +524,7 @@ object frmUserManager: TfrmUserManager
             end
             object ToolButton11: TToolButton
               Left = 160
-              Height = 22
+              Height = 8
               Top = 0
               Caption = 'ToolButton11'
               Style = tbsSeparator

@@ -666,24 +666,6 @@ begin
 end;
 
 procedure TfrmUserManager.LoadTasks;
-//var
-//  c: TListColumn;
-//begin
-  //Task columns
-  //c := lvTasks.Columns.Add;
-  //c.Caption:= 'ID';
-  //C.Width:= 50;
-
-  //c := lvTasks.Columns.Add;
-  //c.caption := 'Task Name';
-  //c.width := 150;
-  //
-  //c := lvTasks.Columns.Add;
-  //c.caption := 'Form Name';
-  //c.width := 150;
-  //
-  //TaskList.ReadList;
-  //lvTasks.Items.Count:= TaskList.Count;
 var
   I: Integer;
   TreeData: TTaskTreeData;
