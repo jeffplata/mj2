@@ -3,6 +3,7 @@ object frmAddTasksToRoles: TfrmAddTasksToRoles
   Height = 303
   Top = 228
   Width = 382
+  BorderStyle = bsDialog
   Caption = 'Select Tasks'
   ClientHeight = 303
   ClientWidth = 382
@@ -31,13 +32,15 @@ object frmAddTasksToRoles: TfrmAddTasksToRoles
       Caption = 'ToolBar2'
       EdgeInner = esNone
       EdgeOuter = esNone
+      Flat = False
       TabOrder = 0
       Transparent = True
       object edtTaskFilter: TEdit
         Left = 1
-        Height = 23
+        Height = 21
         Top = 0
         Width = 168
+        OnChange = edtTaskFilterChange
         TabOrder = 0
       end
       object spbTaskClear: TSpeedButton
@@ -46,6 +49,26 @@ object frmAddTasksToRoles: TfrmAddTasksToRoles
         Top = 0
         Width = 23
         Action = actClearEdit
+        ShowCaption = False
+        ShowHint = True
+        ParentShowHint = False
+      end
+      object ToolButton1: TToolButton
+        Left = 192
+        Height = 22
+        Top = 0
+        Caption = 'ToolButton1'
+        Style = tbsDivider
+      end
+      object spbShowChecked: TSpeedButton
+        Left = 197
+        Height = 22
+        Hint = 'Show Checked'
+        Top = 0
+        Width = 23
+        AllowAllUp = True
+        GroupIndex = 1
+        OnClick = spbShowCheckedClick
         ShowCaption = False
         ShowHint = True
         ParentShowHint = False
@@ -62,22 +85,29 @@ object frmAddTasksToRoles: TfrmAddTasksToRoles
       Header.Columns = <      
         item
           Position = 0
+          Text = 'Task Name'
+          Width = 120
         end      
         item
           Position = 1
+          Text = 'Form Name'
+          Width = 120
         end>
       Header.Options = [hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
       TabOrder = 1
+      TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
       TreeOptions.PaintOptions = [toShowButtons, toShowDropmark, toShowRoot, toThemeAware, toUseBlendedImages]
       OnGetText = vstTasksGetText
+      OnInitNode = vstTasksInitNode
     end
   end
   object ActionList1: TActionList
     OnUpdate = ActionList1Update
-    left = 224
-    top = 16
+    left = 168
+    top = 56
     object actClearEdit: TAction
       Caption = 'actClearEdit'
+      Hint = 'Clear Filter'
       OnExecute = actClearEditExecute
     end
   end

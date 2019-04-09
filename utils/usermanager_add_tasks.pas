@@ -24,17 +24,24 @@ type
     edtTaskFilter: TEdit;
     Panel8: TPanel;
     spbTaskClear: TSpeedButton;
+    spbShowChecked: TSpeedButton;
     ToolBar5: TToolBar;
+    ToolButton1: TToolButton;
     vstTasks: TVirtualStringTree;
     procedure actClearEditExecute(Sender: TObject);
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
+    procedure edtTaskFilterChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure spbShowCheckedClick(Sender: TObject);
     procedure vstTasksGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure vstTasksInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
   private
     procedure PopulateList;
+    procedure FilterVST(filterText:string);
+    procedure ResetFilter;
+    procedure Showchecked(CheckedOnly: boolean = True);
   public
     class function Execute: Boolean;
   end;
@@ -66,8 +73,21 @@ end;
 procedure TfrmAddTasksToRoles.FormCreate(Sender: TObject);
 begin
   dmResources.ImageList1.GetBitmap(4,spbTaskClear.Glyph);
+  dmResources.ImageList1.GetBitmap(5,spbShowChecked.Glyph);
+
+  vstTasks.Header.Options:= vstTasks.Header.Options + [hoAutoResize];
+  vstTasks.Header.AutoSizeIndex:= vstTasks.Header.Columns.GetLastVisibleColumn;
 
   PopulateList;
+  vstTasks.Header.AutoFitColumns(False,smaAllColumns,0,100);
+
+end;
+
+procedure TfrmAddTasksToRoles.spbShowCheckedClick(Sender: TObject);
+begin
+  //if spbShowChecked.Down then Showchecked
+  //else Showchecked(False);
+  Showchecked(spbShowChecked.Down);
 end;
 
 procedure TfrmAddTasksToRoles.vstTasksGetText(Sender: TBaseVirtualTree;
@@ -114,6 +134,54 @@ begin
 
 end;
 
+procedure TfrmAddTasksToRoles.FilterVST(filterText: string);
+var
+  Node: PVirtualNode;
+  Data: PTaskTreeData;
+  Str: String;
+begin
+  // filter tasks
+  Node := vstTasks.GetFirst;
+  while Assigned(Node) do
+  begin
+    Data := vstTasks.GetNodeData(Node);
+    Str := Data^.FFormName+'```'+Data^.FTaskName;
+    vstTasks.IsVisible[Node] := Pos(UpperCase(filterText), UpperCase(Str)) > 0;
+    Node := vstTasks.GetNext(Node);
+  end;
+end;
+
+procedure TfrmAddTasksToRoles.ResetFilter;
+var
+  Node: PVirtualNode;
+begin
+  edtTaskFilter.Clear;
+  Node := vstTasks.GetFirst;
+  while Assigned(Node) do
+  begin
+    vstTasks.IsVisible[Node] := True;
+    Node := vstTasks.GetNext(Node);
+  end;
+end;
+
+procedure TfrmAddTasksToRoles.Showchecked(CheckedOnly: boolean = True);
+var
+  Node: PVirtualNode;
+begin
+  // show checked
+  ResetFilter;
+
+  Node := vstTasks.GetFirst;
+  while Assigned(Node) do
+  begin
+    if CheckedOnly then
+      vstTasks.IsVisible[Node] := vstTasks.CheckState[Node] = csCheckedNormal
+    else
+      vstTasks.IsVisible[Node] := True;
+    Node := vstTasks.GetNext(Node);
+  end;
+end;
+
 procedure TfrmAddTasksToRoles.actClearEditExecute(Sender: TObject);
 begin
   edtTaskFilter.Clear;
@@ -124,6 +192,15 @@ procedure TfrmAddTasksToRoles.ActionList1Update(AAction: TBasicAction;
 begin
   if aaction = actClearEdit then
     actClearEdit.Enabled:= edtTaskFilter.text <> '';
+end;
+
+
+procedure TfrmAddTasksToRoles.edtTaskFilterChange(Sender: TObject);
+begin
+  if edtTaskFilter.Text <> '' then
+    FilterVST(edtTaskFilter.text)
+  else
+    ResetFilter;
 end;
 
 class function TfrmAddTasksToRoles.Execute: Boolean;
