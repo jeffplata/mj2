@@ -21,7 +21,11 @@ type
   TfrmAddTasksToRoles = class(TForm)
     actClearEdit: TAction;
     ActionList1: TActionList;
+    Bevel1: TBevel;
+    btnCancel: TButton;
+    btnOk: TButton;
     edtTaskFilter: TEdit;
+    Panel1: TPanel;
     Panel8: TPanel;
     spbTaskClear: TSpeedButton;
     spbShowChecked: TSpeedButton;
@@ -85,8 +89,6 @@ end;
 
 procedure TfrmAddTasksToRoles.spbShowCheckedClick(Sender: TObject);
 begin
-  //if spbShowChecked.Down then Showchecked
-  //else Showchecked(False);
   Showchecked(spbShowChecked.Down);
 end;
 

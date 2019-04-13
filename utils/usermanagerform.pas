@@ -299,7 +299,9 @@ end;
 
 procedure TfrmUserManager.actTaskAddExecute(Sender: TObject);
 begin
-  TfrmAddTasksToRoles.Execute;
+  if TfrmAddTasksToRoles.Execute then
+    // add to USR_ROLETASK
+    ;
 end;
 
 //procedure TfrmUserManager.actTaskAddExecute(Sender: TObject);
