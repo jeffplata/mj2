@@ -28,14 +28,14 @@ object frmUserManager: TfrmUserManager
       Style = tbsCheck
     end
     object ToolButton2: TToolButton
-      Left = 37
+      Left = 36
       Top = 2
       Action = actTabRoles
       Grouped = True
       Style = tbsCheck
     end
     object ToolButton3: TToolButton
-      Left = 73
+      Left = 70
       Top = 2
       Action = actTabTasks
       Grouped = True
@@ -262,11 +262,11 @@ object frmUserManager: TfrmUserManager
     end
     object tabRoles: TTabSheet
       Caption = 'tabRoles'
-      ClientHeight = 195
+      ClientHeight = 197
       ClientWidth = 588
       object Panel6: TPanel
         Left = 4
-        Height = 187
+        Height = 189
         Top = 4
         Width = 212
         Align = alLeft
@@ -275,14 +275,14 @@ object frmUserManager: TfrmUserManager
         BorderSpacing.Bottom = 4
         BevelOuter = bvNone
         Caption = 'Panel6'
-        ClientHeight = 187
+        ClientHeight = 189
         ClientWidth = 212
         TabOrder = 0
         object Label3: TLabel
           Left = 0
-          Height = 15
+          Height = 13
           Top = 0
-          Width = 30
+          Width = 31
           Caption = 'Roles'
           Font.Style = [fsBold]
           ParentColor = False
@@ -290,7 +290,7 @@ object frmUserManager: TfrmUserManager
         end
         object Panel7: TPanel
           Left = 0
-          Height = 167
+          Height = 169
           Top = 20
           Width = 210
           Align = alBottom
@@ -298,12 +298,12 @@ object frmUserManager: TfrmUserManager
           BorderSpacing.Right = 2
           BevelOuter = bvNone
           Caption = 'Panel4'
-          ClientHeight = 167
+          ClientHeight = 169
           ClientWidth = 210
           TabOrder = 0
           object lvRoles: TListView
             Left = 0
-            Height = 167
+            Height = 169
             Top = 0
             Width = 185
             Align = alClient
@@ -320,7 +320,7 @@ object frmUserManager: TfrmUserManager
           end
           object ToolBar4: TToolBar
             Left = 185
-            Height = 167
+            Height = 169
             Top = 0
             Width = 25
             Align = alRight
@@ -349,7 +349,7 @@ object frmUserManager: TfrmUserManager
       end
       object Panel10: TPanel
         Left = 220
-        Height = 187
+        Height = 189
         Top = 4
         Width = 364
         Align = alClient
@@ -359,32 +359,32 @@ object frmUserManager: TfrmUserManager
         BorderSpacing.Bottom = 4
         BevelOuter = bvNone
         Caption = 'Panel10'
-        ClientHeight = 187
+        ClientHeight = 189
         ClientWidth = 364
         TabOrder = 1
         object Label6: TLabel
           Left = 0
-          Height = 15
+          Height = 13
           Top = 0
-          Width = 80
+          Width = 73
           Caption = 'Assigned Tasks'
           ParentColor = False
         end
         object Panel11: TPanel
           Left = 0
-          Height = 167
+          Height = 169
           Top = 20
           Width = 364
           Align = alBottom
           Anchors = [akTop, akLeft, akBottom]
           BevelOuter = bvNone
           Caption = 'Panel5'
-          ClientHeight = 167
+          ClientHeight = 169
           ClientWidth = 364
           TabOrder = 0
           object ToolBar6: TToolBar
             Left = 339
-            Height = 163
+            Height = 165
             Top = 4
             Width = 25
             Align = alRight
@@ -414,7 +414,7 @@ object frmUserManager: TfrmUserManager
           end
           object vstAssignedTasks: TVirtualStringTree
             Left = 0
-            Height = 167
+            Height = 169
             Top = 0
             Width = 339
             Align = alClient

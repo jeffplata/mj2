@@ -299,7 +299,7 @@ end;
 
 procedure TfrmUserManager.actTaskAddExecute(Sender: TObject);
 begin
-  if TfrmAddTasksToRoles.Execute then
+  if TfrmAddTasksToRoles.Execute(TaskList) then
     // add to USR_ROLETASK
     ;
 end;
@@ -682,11 +682,11 @@ begin
   vstAssignedTasks.BeginUpdate;
   for i := 0 to TaskList.Count-1 do
   begin
-    Treedata.FID:= TaskList.Items[i].ID;
-    Treedata.FRoleID:= TaskList.Items[i].RoleID;
-    Treedata.FRoleName:= TaskList.Items[i].RoleName;
-    TreeData.FTaskName:= TaskList.Items[i].TaskName;
-    TreeData.FFormName:= TaskList.Items[i].FormName;
+    Treedata.FID       := TaskList.Items[i].ID;
+    Treedata.FRoleID   := TaskList.Items[i].RoleID;
+    Treedata.FRoleName := TaskList.Items[i].RoleName;
+    TreeData.FTaskName := TaskList.Items[i].TaskName;
+    TreeData.FFormName := TaskList.Items[i].FormName;
     Node := AddVSTTaskStructure(vstAssignedTasks, nil, TreeData);
     vstAssignedTasks.IsVisible[Node] := False;
   end;

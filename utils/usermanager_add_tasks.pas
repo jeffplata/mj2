@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, ComCtrls, Buttons, ActnList, Menus, VirtualTrees;
+  StdCtrls, ComCtrls, Buttons, ActnList, Menus, VirtualTrees, UserManager_bom;
 
 type
 
@@ -47,7 +47,7 @@ type
     procedure ResetFilter;
     procedure Showchecked(CheckedOnly: boolean = True);
   public
-    class function Execute: Boolean;
+    class function Execute(TaskList:TTaskList): Boolean;
   end;
 
 //var
@@ -205,15 +205,26 @@ begin
     ResetFilter;
 end;
 
-class function TfrmAddTasksToRoles.Execute: Boolean;
+class function TfrmAddTasksToRoles.Execute(TaskList: TTaskList): Boolean;
 var
   frm: TfrmAddTasksToRoles;
+  Node: PVirtualNode;
 begin
   Result := false;
   frm := TfrmAddTasksToRoles.Create(nil);
   try
     if frm.showmodal = mrOk then
+    begin
+      // scan tasklist and add selected items from checklist
+      Node := vstTasks.GetFirstChecked;
+      while Assigned(Node) do
+      begin
+        //traverse selected nodes;
+        //todo: here
+      end;
+      for i := 0 to vstTasks.chi;
       Result := true;
+    end
   finally
     frm.free;
   end;

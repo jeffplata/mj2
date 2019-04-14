@@ -37,7 +37,7 @@ object frmAddTasksToRoles: TfrmAddTasksToRoles
       Transparent = True
       object edtTaskFilter: TEdit
         Left = 1
-        Height = 23
+        Height = 21
         Top = 0
         Width = 168
         OnChange = edtTaskFilterChange
@@ -128,6 +128,7 @@ object frmAddTasksToRoles: TfrmAddTasksToRoles
       Width = 75
       Anchors = [akTop, akRight]
       Caption = 'Ok'
+      ModalResult = 1
       TabOrder = 0
     end
     object btnCancel: TButton
@@ -137,6 +138,7 @@ object frmAddTasksToRoles: TfrmAddTasksToRoles
       Width = 75
       Anchors = [akTop, akRight]
       Caption = 'Cancel'
+      ModalResult = 2
       TabOrder = 1
     end
   end
